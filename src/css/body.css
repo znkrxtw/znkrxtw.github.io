@@ -9,6 +9,10 @@
     padding: 0 2rem;
 }
 
+.description {
+    margin: 2rem auto;
+}
+
 .mainbox {
 width: auto;
 height: auto;
