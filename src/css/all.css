@@ -1,12 +1,5 @@
-
-
 body{
-font-family: OpenSans;
+    font-family: OpenSans, fantasy;
 margin: 0;
 }
 
-.content-container {
-    max-width: 1200px;
-    margin: 14rem auto;
-    padding: 0 2rem;
-}
