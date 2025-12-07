@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="redactle/lib/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="redactle/lib/ldloader/ldloader.css" type="text/css" rel="stylesheet">
+    <link href="redactle/styles.css" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="description"
+          content="Try to find the title of a random Wikipedia article by guessing words to reveal them on the page. New puzzle daily!">
+    <meta property="og:title" content="Redactle">
+    <meta property="og:description" content="Try to find the title of a random Wikipedia article.">
+
+    <script src="redactle/lib/comfy/comfy.min.js"></script>
+    <script src="redactle/lib/bootstrap/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="redactle/lib/ldloader/ldloader.js"></script>
+
+    <title>TwitchDactle - A game</title>
+</head>
+
+<body>
+<header class="navbar-container">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top" id="navBar">
+        <span class="navbar-brand mb-0 h1 mx-4" id="navbar-brand">TwitchDactle</span>
+        <button type="button" class="navbar-toggler mx-2" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse ms-5" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link mx-2" href="#" id="infoBtn">Info</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2" href="#" id="statsBtn">Stats</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2" href="#" id="settingsBtn">Settings</a>
+                </li>
+            </ul>
+            <button type="button" class="btn btn-outline-secondary" id="newGame">New Game</button>
+            <button type="button" class="btn btn-outline-secondary btn-fancy-reveal" id="revealPageButton">Reveal
+                Page
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-fancy-reveal" id="revealNumbersButton">Reveal
+                Numbers
+            </button>
+        </div>
+    </nav>
+    <div class="hide-nav-bar" id="hideNavBarButtonContainer">
+        <button type="button" class="hide-nav-bar-button" id="hideNavBarButton">↑</button>
+    </div>
+</header>
+
+<div class="parent-container">
+    <div class="article-container">
+        <div class="container container-lg" id="winText"></div>
+        <div class="container container-lg" id="wikiHolder" style="display: flex;">
+            <div class="mw-parser-output">
+            </div>
+        </div>
+    </div>
+    <div class="guess-area">
+        <div class="input-container" id="inputHolder">
+            <div class="guess-container" id="inGrp">
+                <button type="button" id="backToTop">▲ Top</button>
+                <input type="text" aria-label="Text input" autofocus autocomplete="off" placeholder="Guess"
+                       id="userGuess">
+                <button type="button" class="btn btn-guess" id="submitGuess">Guess</button>
+            </div>
+        </div>
+        <div class="guess-hit-container">
+            <table class="table table-dark table-hover" id="tableHolder">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Guess</th>
+                    <th scope="col">Hits</th>
+                </tr>
+                </thead>
+                <tbody id="guessLogBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="redactle/lib/tsparticles/tsparticles.confettti.bundles.js"></script>
+
+<!-- Modal Loader -->
+<script type="text/javascript">
+// Modal loader - loads external modal HTML files
+async function loadModals() {
+    const modals = ['info', 'settings', 'stats', 'revealPage'];
+
+    for (const name of modals) {
+        try {
+            const response = await fetch(`redactle/modals/${name}.html`);
+            if (!response.ok) {
+                console.error(`Failed to load ${name} modal: ${response.status}`);
+                continue;
+            }
+            const html = await response.text();
+            document.body.insertAdjacentHTML('beforeend', html);
+            console.log(`Loaded ${name} modal`);
+        } catch (error) {
+            console.error(`Error loading ${name} modal:`, error);
+        }
+    }
+}
+
+// Load modals before other scripts initialize
+loadModals().then(() => {
+    console.log('All modals loaded');
+    // Trigger any initialization that depends on modals being present
+    document.dispatchEvent(new CustomEvent('modalsLoaded'));
+});
+</script>
+<script type="text/javascript" src="redactle/commonWords.js"></script>
+<script type="text/javascript" src="redactle/pluralize.js"></script>
+<script type="text/javascript" src="redactle/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="redactle/lib/baffle/baffle.min.js"></script>
+<script type="text/javascript" src="redactle/gameList.js"></script>
+<script type="text/javascript" src="redactle/articleNames.js" defer></script>
+<script type="text/javascript" src="redactle/customArticleNames.js" defer></script>
+<script type="text/javascript" src="redactle/rejectionFunctions.js" defer></script>
+
+<script type="text/javascript" src="redactle/game/logic.js"></script>
+<script type="text/javascript" src="redactle/game/profileData.js"></script>
+<script type="text/javascript" src="redactle/game/startup.js"></script>
+<script type="text/javascript" src="redactle/game/ui.js"></script>
+<script type="text/javascript" src="redactle/game/utility.js"></script>
+<script type="text/javascript" src="redactle/game/wikiData.js"></script>
+
+<script type="text/javascript" src="redactle/game/redactleGame.js"></script>
+
+</body>
+
+</html>
