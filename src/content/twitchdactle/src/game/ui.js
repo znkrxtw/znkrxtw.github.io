@@ -1,4 +1,4 @@
-﻿class UI {
+class UI {
 
     constructor(game) {
         this.game = game;
@@ -10,7 +10,7 @@
         // DOM references
         this.wikiHolder = document.getElementById("wikiHolder");
         this.guessLogBody = document.getElementById("guessLogBody");
-        this.statLogBody = document.getElementById("statsTable");
+        // statLogBody will be initialized on-demand when needed
 
         //guesses
         this.highlightedGuess = document.querySelectorAll('.highlighted');
@@ -63,7 +63,7 @@
     }
 
     displayStats(index, gameAnswers, gameScores, gameAccuracy) {
-        const statRow = this.statLogBody.insertRow(1);
+        const statRow = document.getElementById("statsTable").insertRow(1);
         statRow.innerHTML = '<td>' + (index + 1) + '</td><td>' + gameAnswers[index] + '</td><td>' + gameScores[index] + '</td><td>' + gameAccuracy[index] + '%</td>';
     }
 

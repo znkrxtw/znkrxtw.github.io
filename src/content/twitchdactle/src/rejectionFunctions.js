@@ -1,6 +1,5 @@
 
 function WordCount(text, word) {
-    console.log("counting words");
     let splitText = text.split(' ');
     let filterText = splitText.filter(function (n) { return n === word });
     return filterText.length;

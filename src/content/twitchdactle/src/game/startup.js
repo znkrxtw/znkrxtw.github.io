@@ -9,10 +9,14 @@ class StartUp {
 
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => {
-                this.init();
+                document.addEventListener('modalsLoaded', () => {
+                    this.init();
+                });
             });
         } else {
-            this.init();
+            document.addEventListener('modalsLoaded', () => {
+                    this.init();
+                });
         }
     }
 
@@ -96,6 +100,7 @@ class StartUp {
 
         document.querySelectorAll('.closeInfo').forEach((element) => {
             element.addEventListener('click',  () => {
+                document.activeElement.blur();
                 infoModal.hide();
                 document.body.style.overflow = "auto";
             });
@@ -103,6 +108,7 @@ class StartUp {
 
         document.querySelectorAll('.closeSettings').forEach((element) => {
             element.addEventListener('click', () => {
+                document.activeElement.blur();
                 settingsModal.hide();
                 document.body.style.overflow = "auto";
                 this.connectStream();
@@ -112,6 +118,7 @@ class StartUp {
 
         document.querySelectorAll('.closeStats').forEach(function (element) {
             element.addEventListener('click', function () {
+                document.activeElement.blur();
                 statsModal.hide();
                 document.body.style.overflow = "auto";
             });
@@ -119,6 +126,7 @@ class StartUp {
 
         document.querySelectorAll('.closeReveal').forEach(function (element) {
             element.addEventListener('click', function () {
+                document.activeElement.blur();
                 revealModal.hide();
                 document.body.style.overflow = "auto";
             });
@@ -127,6 +135,7 @@ class StartUp {
         document.querySelectorAll('.doReveal').forEach( (element) => {
             element.addEventListener('click', () => {
                 this.game.winRound(false);
+                document.activeElement.blur();
                 revealModal.hide();
                 document.body.style.overflow = "auto";
             });
@@ -151,19 +160,23 @@ class StartUp {
 
         window.onclick = (event) => {
             if (event.target === document.getElementById("infoModal")) {
+                document.activeElement.blur();
                 infoModal.hide();
                 document.querySelector("body").style.overflow = "auto";
             }
             if (event.target === document.getElementById("settingsModal")) {
+                document.activeElement.blur();
                 settingsModal.hide();
                 document.querySelector("body").style.overflow = "auto";
                 this.connectStream();
             }
             if (event.target === document.getElementById("statsModal")) {
+                document.activeElement.blur();
                 statsModal.hide();
                 document.querySelector("body").style.overflow = "auto";
             }
             if (event.target === document.getElementById("revealModal")) {
+                document.activeElement.blur();
                 revealModal.hide();
                 document.querySelector("body").style.overflow = "auto";
             }

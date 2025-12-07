@@ -5,9 +5,9 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="redactle/lib/bootstrap/bootstrap.min.css" rel="stylesheet">
-    <link href="redactle/lib/ldloader/ldloader.css" type="text/css" rel="stylesheet">
-    <link href="redactle/styles.css" rel="stylesheet">
+    <link href="src/lib/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="src/lib/ldloader/ldloader.css" type="text/css" rel="stylesheet">
+    <link href="src/styles.css" rel="stylesheet">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <meta name="msapplication-TileColor" content="#da532c">
@@ -17,9 +17,9 @@
     <meta property="og:title" content="Redactle">
     <meta property="og:description" content="Try to find the title of a random Wikipedia article.">
 
-    <script src="redactle/lib/comfy/comfy.min.js"></script>
-    <script src="redactle/lib/bootstrap/bootstrap.bundle.min.js"></script>
-    <script type="text/javascript" src="redactle/lib/ldloader/ldloader.js"></script>
+    <script src="src/lib/comfy/comfy.min.js"></script>
+    <script src="src/lib/bootstrap/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="src/lib/ldloader/ldloader.js"></script>
 
     <title>TwitchDactle - A game</title>
 </head>
@@ -90,7 +90,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="redactle/lib/tsparticles/tsparticles.confettti.bundles.js"></script>
+<script type="text/javascript" src="src/lib/tsparticles/tsparticles.confettti.bundles.js"></script>
 
 <!-- Modal Loader -->
 <script type="text/javascript">
@@ -100,14 +100,13 @@ async function loadModals() {
 
     for (const name of modals) {
         try {
-            const response = await fetch(`redactle/modals/${name}.html`);
+            const response = await fetch(`src/modals/${name}.html`);
             if (!response.ok) {
                 console.error(`Failed to load ${name} modal: ${response.status}`);
                 continue;
             }
             const html = await response.text();
             document.body.insertAdjacentHTML('beforeend', html);
-            console.log(`Loaded ${name} modal`);
         } catch (error) {
             console.error(`Error loading ${name} modal:`, error);
         }
@@ -116,28 +115,29 @@ async function loadModals() {
 
 // Load modals before other scripts initialize
 loadModals().then(() => {
-    console.log('All modals loaded');
     // Trigger any initialization that depends on modals being present
     document.dispatchEvent(new CustomEvent('modalsLoaded'));
 });
 </script>
-<script type="text/javascript" src="redactle/commonWords.js"></script>
-<script type="text/javascript" src="redactle/pluralize.js"></script>
-<script type="text/javascript" src="redactle/lib/clipboard/clipboard.js"></script>
-<script type="text/javascript" src="redactle/lib/baffle/baffle.min.js"></script>
-<script type="text/javascript" src="redactle/gameList.js"></script>
-<script type="text/javascript" src="redactle/articleNames.js" defer></script>
-<script type="text/javascript" src="redactle/customArticleNames.js" defer></script>
-<script type="text/javascript" src="redactle/rejectionFunctions.js" defer></script>
+<script type="text/javascript" src="src/commonWords.js"></script>
+<script type="text/javascript" src="src/pluralize.js"></script>
+<script type="text/javascript" src="src/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="src/lib/baffle/baffle.min.js"></script>
+<script type="text/javascript" src="src/gameList.js"></script>
+<script type="text/javascript" src="src/articleNames.js" defer></script>
+<script type="text/javascript" src="src/customArticleNames.js" defer></script>
+<script type="text/javascript" src="src/rejectionFunctions.js" defer></script>
 
-<script type="text/javascript" src="redactle/game/logic.js"></script>
-<script type="text/javascript" src="redactle/game/profileData.js"></script>
-<script type="text/javascript" src="redactle/game/startup.js"></script>
-<script type="text/javascript" src="redactle/game/ui.js"></script>
-<script type="text/javascript" src="redactle/game/utility.js"></script>
-<script type="text/javascript" src="redactle/game/wikiData.js"></script>
+<script type="text/javascript" src="src/game/logic.js"></script>
+<script type="text/javascript" src="src/game/profileData.js"></script>
+<script type="text/javascript" src="src/game/startup.js"></script>
+<script type="text/javascript" src="src/game/ui.js"></script>
+<script type="text/javascript" src="src/game/utility.js"></script>
+<script type="text/javascript" src="src/game/wikiData.js"></script>
 
-<script type="text/javascript" src="redactle/game/redactleGame.js"></script>
+<script type="text/javascript" src="src/game/gameState.js"></script>
+
+<script type="text/javascript" src="src/game/redactleGame.js"></script>
 
 </body>
 

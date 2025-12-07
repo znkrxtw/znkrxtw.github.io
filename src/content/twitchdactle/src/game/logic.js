@@ -92,7 +92,8 @@ class Logic {
     }
 
     getArticleName() {
-        const value = document.getElementById("selectArticle").value;
+        const selectElement = document.getElementById("selectArticle");
+        const value = selectElement ? selectElement.value : 'standard';
         if (value === 'custom') {
             return customArticles[Math.floor(Math.random() * customArticles.length)];
         }
@@ -166,7 +167,7 @@ class Logic {
                 this.clickThruIndex += 1;
             });
         } else {
-            newRow.addEventListener('click', (e) => {
+            newRow.addEventListener('click', () => {
                 this.ui.removeHighlights(true);
             });
         }
