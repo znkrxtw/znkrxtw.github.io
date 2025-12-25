@@ -14,13 +14,33 @@ async function exists(p) {
   }
 }
 
+async function copyWithExclude(src, dest, exclude = []) {
+  await fs.mkdir(dest, { recursive: true });
+  const entries = await fs.readdir(src, { withFileTypes: true });
+  
+  for (const entry of entries) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+    
+    if (exclude.some(ex => srcPath.includes(ex))) {
+      continue; // Skip excluded paths
+    }
+    
+    if (entry.isDirectory()) {
+      await copyWithExclude(srcPath, destPath, exclude);
+    } else {
+      await fs.copyFile(srcPath, destPath);
+    }
+  }
+}
+
 async function main() {
   if (!(await exists(srcDir))) {
     throw new Error(`Expected ${srcDir} to exist.`);
   }
 
-  await fs.mkdir(distSrcDir, { recursive: true });
-  await fs.cp(srcDir, distSrcDir, { recursive: true });
+  // Copy everything except vendor.js (which is bundled by Vite)
+  await copyWithExclude(srcDir, distSrcDir, ['vendor.js']);
 }
 
 main().catch((err) => {
