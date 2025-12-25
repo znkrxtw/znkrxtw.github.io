@@ -39,8 +39,8 @@ async function main() {
     throw new Error(`Expected ${srcDir} to exist.`);
   }
 
-  // Copy everything except vendor.js (which is bundled by Vite)
-  await copyWithExclude(srcDir, distSrcDir, ['vendor.js']);
+  // Copy everything except vendor.js and HTML files that Vite processes
+  await copyWithExclude(srcDir, distSrcDir, ['vendor.js', 'twitchDactle.html']);
 }
 
 main().catch((err) => {
