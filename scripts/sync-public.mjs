@@ -1,9 +1,30 @@
-import { execSync } from 'node:child_process';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 
 const srcDir = 'src/content/twitchdactle/src';
 const publicDir = 'public/src/content/twitchdactle/src';
 
-// Sync src to public (excluding vendor.js)
-execSync(`robocopy "${srcDir}" "${publicDir}" /E /XF vendor.js`, { stdio: 'inherit' });
+async function copyRecursive(src, dest, exclude = []) {
+  await fs.mkdir(dest, { recursive: true });
+  const entries = await fs.readdir(src, { withFileTypes: true });
+  
+  for (const entry of entries) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+    
+    if (exclude.includes(entry.name)) {
+      continue; // Skip excluded files
+    }
+    
+    if (entry.isDirectory()) {
+      await copyRecursive(srcPath, destPath, exclude);
+    } else {
+      await fs.copyFile(srcPath, destPath);
+    }
+  }
+}
+
+// Copy src to public (excluding vendor.js)
+await copyRecursive(srcDir, publicDir, ['vendor.js']);
 
 console.log('✓ Synced src files to public folder');
