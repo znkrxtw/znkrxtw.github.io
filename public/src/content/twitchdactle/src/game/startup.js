@@ -1,5 +1,3 @@
-//TODO move this to redactleGame?
-
 export class StartUp {
 
     constructor(game) {
@@ -60,17 +58,17 @@ export class StartUp {
 
         document.getElementById('autoPlural').addEventListener('change', (event) => {
             this.game.pluralizing = event.target.checked;
-            this.game.saveProgress(this.game);
+            this.profileData.saveProgress(this.game);
         });
 
         document.getElementById('selectArticle').addEventListener('change', (event) => {
             this.game.selectedArticles = event.target.value === 'custom' ? 'custom' : 'standard';
-            this.game.saveProgress(this.game);
+            this.profileData.saveProgress(this.game);
         });
 
         document.getElementById('streamName').addEventListener('change', (event) => {
             this.game.streamName = event.target.value;
-            this.game.saveProgress(this.game);
+            this.profileData.saveProgress(this.game);
         });
 
         document.getElementById('infoBtn').addEventListener('click', () => {
@@ -112,6 +110,7 @@ export class StartUp {
                 document.activeElement.blur();
                 settingsModal.hide();
                 document.body.style.overflow = "auto";
+                this.profileData.streamName = document.getElementById('streamName').value;
                 this.connectStream();
                 this.profileData.saveProgress();
             });
@@ -185,7 +184,7 @@ export class StartUp {
 
         ComfyJS.onChat = (user, message) => {
             const firstWord = [message.split(' ')[0]];
-            const pluralizing = $('#autoPlural').is(':checked');
+            const pluralizing = document.getElementById('autoPlural').checked;
             this.logic.enterGuess(firstWord, pluralizing);
         };
 
@@ -199,7 +198,7 @@ export class StartUp {
     }
 
     connectStream() {
-        if (this.profileData.streamName || document.getElementById('streamName').value) {
+        if (this.profileData.streamName) {
             ComfyJS.Init(this.profileData.streamName);
         }
     }
