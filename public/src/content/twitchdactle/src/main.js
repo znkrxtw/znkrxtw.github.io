@@ -29,8 +29,6 @@ class GameLoader {
         const scripts = [
             'src/commonWords.js',
             'src/pluralize.js',
-            'src/lib/clipboard/clipboard.js',
-            'src/lib/baffle/baffle.min.js',
             'src/gameList.js',
             'src/articleNames.js',
             'src/customArticleNames.js',

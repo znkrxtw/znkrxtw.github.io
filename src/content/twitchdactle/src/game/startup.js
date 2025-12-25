@@ -1,5 +1,4 @@
 //TODO move this to redactleGame?
-import ComfyJS from "comfy.js";
 
 export class StartUp {
 

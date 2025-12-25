@@ -1,3 +1,5 @@
+import { StartUp } from './startup.js';
+
 class TwitchDactleGame {
 
     constructor(dependencies = {}) {
