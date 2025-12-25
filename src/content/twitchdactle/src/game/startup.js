@@ -1,5 +1,7 @@
 //TODO move this to redactleGame?
-class StartUp {
+import ComfyJS from "comfy.js";
+
+export class StartUp {
 
     constructor(game) {
         this.game = game;
@@ -198,7 +200,7 @@ class StartUp {
     }
 
     connectStream() {
-        if (this.profileData.streamName) {
+        if (this.profileData.streamName || document.getElementById('streamName').value) {
             ComfyJS.Init(this.profileData.streamName);
         }
     }
