@@ -1,4 +1,5 @@
 export class GameState {
+
     constructor() {
         this.reset();
     }

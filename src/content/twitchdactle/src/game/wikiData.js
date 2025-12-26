@@ -11,6 +11,8 @@ export class WikiData {
 
     async fetchData(retry, artStr) {
         const article = retry ? artStr : atob(artStr);
+        document.querySelector('.mw-parser-output').style.display = 'none';
+        this.ui.spinner.classList.add('visible');
         return await fetch('https://en.wikipedia.org/w/api.php?action=parse&format=json&page=' + article + '&prop=text&formatversion=2&origin=*')
             .then(resp => {
                 if (!resp.ok) {
@@ -153,10 +155,14 @@ export class WikiData {
                     }
 
                     this.ui.wikiHolder.style.display = "flex";
+                    this.ui.spinner.classList.remove('visible');
+                    document.querySelector('.mw-parser-output').style.display = 'block';
                 }
             })
             .catch(err => {
                 console.error("Error in while getting article: ", err);
+                this.ui.spinner.classList.remove('visible');
+                document.querySelector('.mw-parser-output').style.display = 'block';
             });
     }
 

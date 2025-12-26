@@ -3,15 +3,10 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './styles.css';
 import 'bootstrap';
 
-// Import all game modules
-import './game/logic.js';
-import './game/profileData.js';
-import './game/startup.js';
-import './game/ui.js';
-import './game/utility.js';
-import './game/wikiData.js';
-import './game/gameState.js';
-import './game/redactleGame.js';
-import './helper/commonWords.js';
-import './helper/articleNames.js';
-import './helper/customArticleNames.js';
+// Load modals synchronously before game initialization
+import { loadModals } from './modals.js';
+loadModals();
+
+// Create and start the game
+import { createGame } from './game/redactleGame.js';
+createGame();

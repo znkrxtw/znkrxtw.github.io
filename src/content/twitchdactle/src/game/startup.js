@@ -1,6 +1,5 @@
 import 'bootstrap';
 import { Modal } from 'bootstrap';
-import ComfyJS from 'https://esm.sh/comfy.js';
 
 export class StartUp {
 
@@ -10,17 +9,8 @@ export class StartUp {
         this.logic = game.logic;
         this.profileData = game.profileData;
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => {
-                document.addEventListener('modalsLoaded', () => {
-                    this.init();
-                });
-            });
-        } else {
-            document.addEventListener('modalsLoaded', () => {
-                    this.init();
-                });
-        }
+        // Modals are now loaded synchronously, so we can initialize immediately
+        this.init();
     }
 
     init() {
@@ -186,24 +176,37 @@ export class StartUp {
             }
         };
 
-        ComfyJS.onChat = (user, message) => {
-            const firstWord = [message.split(' ')[0]];
-            const pluralizing = document.getElementById('autoPlural').checked;
-            this.logic.enterGuess(firstWord, pluralizing);
-        };
+        // Initialize ComfyJS if available
+        this.initComfyJS();
+    }
 
-        ComfyJS.onCommand = (user, command) => {
-            if (command === "next" && this.game.pageRevealed === true) {
-                this.game.newGame();
-            }
-        };
+    async initComfyJS() {
+        try {
+            const ComfyJS = await import('comfy.js');
+            
+            ComfyJS.default.onChat = (user, message) => {
+                const firstWord = [message.split(' ')[0]];
+                const pluralizing = document.getElementById('autoPlural').checked;
+                this.logic.enterGuess(firstWord, pluralizing);
+            };
 
-        this.connectStream();
+            ComfyJS.default.onCommand = (user, command) => {
+                if (command === "next" && this.game.pageRevealed === true) {
+                    this.game.newGame();
+                }
+            };
+            
+            this.ComfyJS = ComfyJS;
+
+            this.connectStream();
+        } catch (e) {
+            console.warn('ComfyJS could not be loaded:', e);
+        }
     }
 
     connectStream() {
-        if (this.profileData.streamName) {
-            ComfyJS.Init(this.profileData.streamName);
+        if (this.profileData.streamName && this.ComfyJS) {
+            this.ComfyJS.default.Init(this.profileData.streamName);
         }
     }
 }

@@ -9,7 +9,6 @@ import {GameState} from './gameState.js';
 class TwitchDactleGame {
 
     constructor() {
-        // Initialize game state
         this.state = new GameState();
         this.ui = new UI(this);
         this.utility = new Utility();
@@ -18,10 +17,8 @@ class TwitchDactleGame {
         this.startUp = new StartUp(this);
         this.wikiData = new WikiData(this);
 
-        // Wait for modals to be loaded before initializing
-        document.addEventListener('modalsLoaded', () => {
-            this.init().then();
-        });
+        // Initialize immediately - modals are loaded synchronously
+        this.init();
     }
 
     // Auto-create getters and setters for all state properties
@@ -56,3 +53,8 @@ class TwitchDactleGame {
         await this.wikiData.fetchData(true, this.profileData.articleName);
     }
 }
+
+// Factory function to create game instance
+export const createGame = () => {
+    return new TwitchDactleGame();
+};
