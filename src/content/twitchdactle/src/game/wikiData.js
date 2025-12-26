@@ -1,6 +1,5 @@
 import { Logic } from './logic.js';
 import { commonWords } from '../commonWords.js';
-import baffle from 'baffle';
 
 export class WikiData {
 
@@ -197,8 +196,19 @@ export class WikiData {
             el.classList.add('baffled');
             el.setAttribute('word-length', txt.length);
 
-            // create baffle instance and store it
-            const baffledInstance = baffle(el).once().set({ characters: 'abcd' });
+            // Store original text and replace with squares
+            el.setAttribute('data-original', txt);
+            el.textContent = '█'.repeat(txt.length);
+
+            // Create a simple object to track for revealing
+            const baffledInstance = {
+                element: el,
+                reveal: () => {
+                    el.textContent = el.getAttribute('data-original');
+                    el.removeAttribute('data-original');
+                }
+            };
+
             this.game.baffled.push([txt, baffledInstance]);
 
             // track numeric tokens separately (preserves original logic)
