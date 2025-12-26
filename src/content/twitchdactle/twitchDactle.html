@@ -6,7 +6,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="src/lib/bootstrap/bootstrap.min.css" rel="stylesheet">
-    <link href="src/lib/ldloader/ldloader.css" type="text/css" rel="stylesheet">
     <link href="src/styles.css" rel="stylesheet">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
@@ -18,7 +17,6 @@
     <meta property="og:description" content="Try to find the title of a random Wikipedia article.">
 
     <script src="src/lib/bootstrap/bootstrap.bundle.min.js"></script>
-    <script type="text/javascript" src="src/lib/ldloader/ldloader.js"></script>
 
     <title>TwitchDactle - A game</title>
 </head>
@@ -118,7 +116,7 @@ loadModals().then(() => {
     document.dispatchEvent(new CustomEvent('modalsLoaded'));
 });
 </script>
-<script type="text/javascript" src="src/commonWords.js"></script>
+<script type="module" src="src/commonWords.js"></script>
 <script type="text/javascript" src="src/pluralize.js"></script>
 <script type="module" src="src/vendor.js"></script>
 <script type="text/javascript" src="src/gameList.js"></script>
@@ -126,12 +124,12 @@ loadModals().then(() => {
 <script type="text/javascript" src="src/customArticleNames.js" defer></script>
 <script type="text/javascript" src="src/rejectionFunctions.js" defer></script>
 
-<script type="text/javascript" src="src/game/logic.js"></script>
+<script type="module" src="src/game/logic.js"></script>
 <script type="text/javascript" src="src/game/profileData.js"></script>
 <script type="module" src="src/game/startup.js"></script>
 <script type="text/javascript" src="src/game/ui.js"></script>
 <script type="text/javascript" src="src/game/utility.js"></script>
-<script type="text/javascript" src="src/game/wikiData.js"></script>
+<script type="module" src="src/game/wikiData.js"></script>
 
 <script type="text/javascript" src="src/game/gameState.js"></script>
 

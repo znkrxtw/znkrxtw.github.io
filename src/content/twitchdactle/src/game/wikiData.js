@@ -1,13 +1,13 @@
-﻿class WikiData {
+import { Logic } from './logic.js';
+import { commonWords } from '../commonWords.js';
+
+export class WikiData {
 
     constructor(game) {
         this.game = game;
         this.wikiHolder = game.wikiHolder;
         this.profileData = game.profileData;
         this.ui = game.ui;
-        this.logic = game.logic;
-
-
     }
 
     async fetchData(retry, artStr) {
@@ -132,7 +132,7 @@
                     if (this.profileData.guessedWords.length > 0) {
                         for (var i = 0; i < this.profileData.guessedWords.length; i++) {
                             this.game.guessCounter += 1;
-                            this.logic.performGuess(this.profileData.guessedWords[i][0], true);
+                            Logic.performGuess(this.profileData.guessedWords[i][0], true);
                         }
                     }
                     if (this.profileData.numbersRevealed) {
@@ -155,10 +155,10 @@
 
                     if (this.profileData.selectedArticles === 'custom') {
                         document.getElementById("selectArticle").value = 'custom';
-                        this.logic.selectArticlesCustom();
+                        Logic.selectArticlesCustom();
                     } else {
                         document.getElementById("selectArticle").value = 'standard';
-                        this.logic.selectArticlesStandard();
+                        Logic.selectArticlesStandard();
                     }
 
                     document.getElementById("streamName").value = this.profileData.streamName;
