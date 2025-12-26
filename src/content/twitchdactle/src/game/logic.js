@@ -1,5 +1,6 @@
-import { commonWords } from '../commonWords.js';
+import { commonWords } from '../helper/commonWords.js';
 import {confetti} from "@tsparticles/confetti";
+import pluralize from "pluralize";
 
 export class Logic {
 
@@ -104,7 +105,7 @@ export class Logic {
     enterGuess(allGuesses, pluralizing) {
         if (pluralizing) {
             const pluralGuess = pluralize(allGuesses[0]);
-            const singularGuess = pluralize.singular(allGuesses[0]);
+            const singularGuess = pluralize(allGuesses[0], 1);
             if (pluralGuess !== allGuesses[0]) allGuesses.push(pluralGuess);
             if (singularGuess !== allGuesses[0]) allGuesses.push(singularGuess);
         }

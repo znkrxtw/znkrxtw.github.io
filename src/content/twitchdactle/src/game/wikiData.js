@@ -1,5 +1,5 @@
 import { Logic } from './logic.js';
-import { commonWords } from '../commonWords.js';
+import { commonWords } from '../helper/commonWords.js';
 
 export class WikiData {
 
@@ -114,17 +114,6 @@ export class WikiData {
                     elements[0].innerHTML = elements[0].innerHTML.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/(<style.*<\/style>)/g, "").replace(/(<span class="punctuation">.<\/span>)|(^|<\/?[^>]+>|\s+)|([^\s<]+)/g, '$1$2<span class="innerTxt">$3</span>').replace('<<span class="innerTxt">h1>', '<h1><span class="innerTxt">');
                     elements[0].querySelectorAll('*:empty').forEach(el => el.remove());
                     this.ui.wikiHolder.innerHTML = this.ui.wikiHolder.innerHTML.replace(/<!--(?!>)[\S\s]*?-->/g, '');
-
-                    // make the check for rejection here
-                    // repackage the words into a text and send it to rejectArticle
-                    const cleanerText = [...this.ui.wikiHolder.getElementsByClassName("innerTxt")].reduce((text, item) => text + ' ' + item.textContent, "");
-                    if (rejectArticle(cleanerText)) {
-                        // the article must be skipped
-                        // wait 2 seconds and start a new game
-                        console.log("Skipping the article " + this.game.profileData.articleName);
-                        setTimeout(() => this.game.profileData.newGame(), 2000);
-                        return;
-                    }
 
                     this.game.gameIsActive = true;
                     this.extracted();

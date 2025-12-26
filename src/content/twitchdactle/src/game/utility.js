@@ -1,4 +1,4 @@
-class Utility {
+export class Utility {
 
     constructor() {
 

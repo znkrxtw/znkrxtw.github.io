@@ -1,4 +1,4 @@
-class GameState {
+export class GameState {
     constructor() {
         this.reset();
     }

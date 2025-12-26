@@ -1,4 +1,4 @@
-class ProfileData {
+export class ProfileData {
 
     constructor(game) {
         this.game = game;
