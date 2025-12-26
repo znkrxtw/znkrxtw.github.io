@@ -112,7 +112,7 @@ td {
 }
 
 .hide-nav-bar.shrink {
-    top: 0px;
+    top: 0;
 }
 
 .hide-nav-bar-button {
@@ -225,6 +225,7 @@ td {
 
 .innerTxt {
     z-index: -1;
+    letter-spacing: -0.8px;
 }
 
 .guess-container {

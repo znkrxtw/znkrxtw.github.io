@@ -1,5 +1,7 @@
 // Entry point for Vite bundling
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import './styles.css';
+import 'bootstrap';
 import './helper/articleNames.js';
 import './helper/customArticleNames.js';
 
