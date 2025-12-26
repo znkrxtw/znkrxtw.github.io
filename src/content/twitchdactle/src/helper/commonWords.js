@@ -1,4 +1,4 @@
-const commonWords = ["a",
+export const commonWords = ["a",
     "aboard",
     "about",
     "above",
@@ -151,5 +151,3 @@ const commonWords = ["a",
     "other",
     "another"
 ]
-
-export { commonWords };

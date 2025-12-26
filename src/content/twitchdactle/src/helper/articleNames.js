@@ -1,4 +1,4 @@
-const articles = [
+export const articles = [
     "Julie_Andrews",
     "Lauren_Bacall",
     "Amitabh_Bachchan",

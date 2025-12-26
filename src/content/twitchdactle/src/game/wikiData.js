@@ -1,4 +1,3 @@
-import { Logic } from './logic.js';
 import { commonWords } from '../helper/commonWords.js';
 
 export class WikiData {
@@ -20,17 +19,17 @@ export class WikiData {
                 return resp.json();
             })
             .then(receivedJson => {
-                this.conting = true;
+                this.counting = true;
                 const cleanText = receivedJson.parse.text.replace(/<img[^>]*>/g, "").replace(/<small>/g, '').replace(/<\/small>/g, '').replace(/–/g, '-').replace(/<audio.*<\/audio>/g, "");
                 this.ui.wikiHolder.style.display = "none";
                 this.ui.wikiHolder.innerHTML = cleanText;
                 const redirecting = document.getElementsByClassName('redirectMsg');
                 if (redirecting.length > 0) {
                     const redirectURL = document.querySelectorAll('.redirectText')[0].firstChild.firstChild.innerHTML.replace(/ /g, "_");
-                    this.conting = false;
-                    this.fetchData(!this.conting, redirectURL);
+                    this.counting = false;
+                    this.fetchData(!this.counting, redirectURL);
                 }
-                if (this.conting) {
+                if (this.counting) {
                     let seeAlso;
                     if (document.getElementById("See_also") != null) {
                         seeAlso = document.getElementById("See_also").parentNode;

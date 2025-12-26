@@ -1,4 +1,6 @@
 import { commonWords } from '../helper/commonWords.js';
+import { articles } from '../helper/articleNames.js';
+import { customArticles } from '../helper/customArticleNames.js';
 import {confetti} from "@tsparticles/confetti";
 import pluralize from "pluralize";
 

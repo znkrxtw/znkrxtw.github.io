@@ -2,8 +2,6 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import './styles.css';
 import 'bootstrap';
-import './helper/articleNames.js';
-import './helper/customArticleNames.js';
 
 // Import all game modules
 import './game/logic.js';
@@ -15,3 +13,5 @@ import './game/wikiData.js';
 import './game/gameState.js';
 import './game/redactleGame.js';
 import './helper/commonWords.js';
+import './helper/articleNames.js';
+import './helper/customArticleNames.js';

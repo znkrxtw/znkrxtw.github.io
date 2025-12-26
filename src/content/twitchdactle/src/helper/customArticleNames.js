@@ -1,4 +1,4 @@
-const customArticles = [
+export const customArticles = [
     "Spokane,_Washington",
     "New_York_City",
     "Los_Angeles",
