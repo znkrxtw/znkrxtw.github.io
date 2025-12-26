@@ -23,6 +23,8 @@ export class UI {
         this.navBar = document.getElementById('navBar');
         this.navBarBrand = document.getElementById('navbar-brand');
         this.navBarCollapse = document.getElementById('navbarNav');
+
+        this.spinner = document.getElementById('loadingSpinner');
     }
 
 
@@ -100,7 +102,7 @@ export class UI {
                 })
             }
             if (this.game.answer.length === 0) {
-                this.ui.winRound(true);
+                this.game.logic.winRound(true);
                 break;
             }
         }

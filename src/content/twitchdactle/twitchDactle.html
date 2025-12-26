@@ -55,6 +55,10 @@
     <div class="article-container">
         <div class="container container-lg" id="winText"></div>
         <div class="container container-lg" id="wikiHolder" style="display: flex;">
+            <div class="loading-spinner" id="loadingSpinner">
+                <div class="spinner"></div>
+                <p>Loading article...</p>
+            </div>
             <div class="mw-parser-output">
             </div>
         </div>
@@ -82,34 +86,6 @@
         </div>
     </div>
 </div>
-
-<!-- Modal Loader -->
-<script type="text/javascript">
-    // Modal loader - loads external modal HTML files
-    async function loadModals() {
-        const modals = ['info', 'settings', 'stats', 'revealPage'];
-
-        for (const name of modals) {
-            try {
-                const response = await fetch(`src/modals/${name}.html`);
-                if (!response.ok) {
-                    console.error(`Failed to load ${name} modal: ${response.status}`);
-                    continue;
-                }
-                const html = await response.text();
-                document.body.insertAdjacentHTML('beforeend', html);
-            } catch (error) {
-                console.error(`Error loading ${name} modal:`, error);
-            }
-        }
-    }
-
-    // Load modals before other scripts initialize
-    loadModals().then(() => {
-        // Trigger any initialization that depends on modals being present
-        document.dispatchEvent(new CustomEvent('modalsLoaded'));
-    });
-</script>
 
 <script type="module" src="src/main.js"></script>
 
