@@ -193,20 +193,17 @@ export class WikiData {
             if (commonWords.includes(txt)) return;
 
             // mark as baffled and record length (same behavior as original)
-            el.classList.add('baffled');
             el.setAttribute('word-length', txt.length);
 
             // Store original text and replace with squares
-            el.setAttribute('data-original', txt);
             el.textContent = '█'.repeat(txt.length);
 
             // Create a simple object to track for revealing
             const baffledInstance = {
                 element: el,
-                reveal: () => {
-                    el.textContent = el.getAttribute('data-original');
-                    el.removeAttribute('data-original');
-                }
+                elements: [{element: el}],
+                originalText: raw,
+                reveal: function() {el.textContent = this.originalText; }
             };
 
             this.game.baffled.push([txt, baffledInstance]);

@@ -138,7 +138,7 @@ export class StartUp {
 
         document.querySelectorAll('.doReveal').forEach( (element) => {
             element.addEventListener('click', () => {
-                this.game.winRound(false);
+                this.logic.winRound(false);
                 document.activeElement.blur();
                 revealModal.hide();
                 document.body.style.overflow = "auto";

@@ -5,7 +5,6 @@ export class Logic {
 
     constructor(game) {
         this.game = game;
-        this.ui = game.ui;
         this.profileData = game.profileData;
 
         // expose methods on the game instance so existing callers keep working
@@ -19,7 +18,7 @@ export class Logic {
             return;
         }
         this.clickThruIndex = 0;
-        this.ui.removeHighlights(false);
+        this.game.ui.removeHighlights(false);
         const normGuess = guessedWord.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
         if (commonWords.includes(normGuess)) {
             // do nothing
@@ -35,7 +34,6 @@ export class Logic {
                 for (let i = 0; i < this.game.baffled.length; i++) {
                     if (this.game.baffled[i][0] === normGuess) {
                         this.game.baffled[i][1].reveal();
-                        this.game.baffled[i][1].elements[0].element.classList.remove("baffled");
                         this.game.baffled[i][1].elements[0].element.setAttribute("data-word", normGuess);
                         numHits += 1;
                         if (!populate) {
@@ -84,12 +82,12 @@ export class Logic {
     }
 
     buildStats() {
-        for (let i = this.ui.statLogBody.rows.length - 1; i > 0; i--) {
-            this.ui.statLogBody.deleteRow(i);
+        for (let i = this.game.ui.statLogBody.rows.length - 1; i > 0; i--) {
+            this.game.ui.statLogBody.deleteRow(i);
         }
         for (let i = 0; i < this.profileData.gameWins.length; i++) {
             if (this.profileData.gameWins[i] === 1) {
-                this.ui.displayStats(i, this.profileData.gameAnswers[i], this.profileData.gameScores[i], this.profileData.gameAccuracy[i]);
+                this.game.ui.displayStats(i, this.profileData.gameAnswers[i], this.profileData.gameScores[i], this.profileData.gameAccuracy[i]);
             }
         }
     }
@@ -117,9 +115,9 @@ export class Logic {
 
     logGuess(guess, populate) {
         if (this.profileData.hidingZero) {
-            this.ui.hideZero();
+            this.game.ui.hideZero();
         }
-        let newRow = this.ui.guessLogBody.insertRow(0);
+        let newRow = this.game.ui.guessLogBody.insertRow(0);
         newRow.class = 'curGuess';
         newRow.setAttribute('data-guess', guess[0]);
         if (!populate) {
@@ -134,8 +132,8 @@ export class Logic {
         if (guess[1] > 0) {
             newRow.addEventListener('click', (e) => {
                 e.preventDefault();
-                const inTxt = this.ui.getInnerTextFromRow(this, newRow, 1);
-                const allInstances = this.ui.wikiHolder.querySelectorAll('[data-word="' + inTxt + '"]');
+                const inTxt = this.game.ui.getInnerTextFromRow(this, newRow, 1);
+                const allInstances = this.game.ui.wikiHolder.querySelectorAll('[data-word="' + inTxt + '"]');
                 if (this.currentlyHighlighted == null) {
                     this.clickThruIndex = 0;
                     this.currentlyHighlighted = inTxt;
@@ -148,7 +146,7 @@ export class Logic {
                 } else {
                     if (inTxt !== this.currentlyHighlighted) {
                         this.clickThruIndex = 0;
-                        this.ui.removeHighlights(false);
+                        this.game.ui.removeHighlights(false);
                         newRow.classList.add('table-secondary');
                         document.querySelectorAll('.innerTxt').forEach((element) => {
                             if (element.innerHTML.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase() === inTxt) {
@@ -171,7 +169,7 @@ export class Logic {
             });
         } else {
             newRow.addEventListener('click', () => {
-                this.ui.removeHighlights(true);
+                this.game.ui.removeHighlights(true);
             });
         }
         newRow.innerHTML = '<td>' + guess[2] + '</td><td>' + guess[0] + '</td><td class="tableHits">' + guess[1] + '</td>';
@@ -186,7 +184,7 @@ export class Logic {
 
     winRound(populate) {
         this.gameIsActive = false;
-        this.ui.userGuess.disabled = true;
+        this.game.ui.userGuess.disabled = true;
         const clap = new Audio('Clap.wav');
         clap.volume = 0.5;
         clap.addEventListener('canplaythrough', clap.play);
@@ -202,7 +200,7 @@ export class Logic {
             },
             origin: {y: 0.6}
         }).then(() => {
-            this.ui.revealPage();
+            this.game.ui.revealPage();
             if (!populate) {
                 this.profileData.gameScores[this.profileData.redactleIndex] = this.profileData.guessedWords.length;
                 this.profileData.gameAccuracy[this.profileData.redactleIndex] = this.currentAccuracy;

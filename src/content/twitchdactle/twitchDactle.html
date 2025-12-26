@@ -12,10 +12,9 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
     <meta name="description"
-          content="Try to find the title of a random Wikipedia article by guessing words to reveal them on the page. New puzzle daily!">
+          content="Try to find the title of a random Wikipedia article by guessing words to reveal them on the page.">
     <meta property="og:title" content="Redactle">
     <meta property="og:description" content="Try to find the title of a random Wikipedia article.">
-
 
     <title>TwitchDactle - A game</title>
 </head>
@@ -88,30 +87,30 @@
 
 <!-- Modal Loader -->
 <script type="text/javascript">
-// Modal loader - loads external modal HTML files
-async function loadModals() {
-    const modals = ['info', 'settings', 'stats', 'revealPage'];
+    // Modal loader - loads external modal HTML files
+    async function loadModals() {
+        const modals = ['info', 'settings', 'stats', 'revealPage'];
 
-    for (const name of modals) {
-        try {
-            const response = await fetch(`src/modals/${name}.html`);
-            if (!response.ok) {
-                console.error(`Failed to load ${name} modal: ${response.status}`);
-                continue;
+        for (const name of modals) {
+            try {
+                const response = await fetch(`src/modals/${name}.html`);
+                if (!response.ok) {
+                    console.error(`Failed to load ${name} modal: ${response.status}`);
+                    continue;
+                }
+                const html = await response.text();
+                document.body.insertAdjacentHTML('beforeend', html);
+            } catch (error) {
+                console.error(`Error loading ${name} modal:`, error);
             }
-            const html = await response.text();
-            document.body.insertAdjacentHTML('beforeend', html);
-        } catch (error) {
-            console.error(`Error loading ${name} modal:`, error);
         }
     }
-}
 
-// Load modals before other scripts initialize
-loadModals().then(() => {
-    // Trigger any initialization that depends on modals being present
-    document.dispatchEvent(new CustomEvent('modalsLoaded'));
-});
+    // Load modals before other scripts initialize
+    loadModals().then(() => {
+        // Trigger any initialization that depends on modals being present
+        document.dispatchEvent(new CustomEvent('modalsLoaded'));
+    });
 </script>
 <script type="module" src="src/commonWords.js"></script>
 <script type="text/javascript" src="src/pluralize.js"></script>
@@ -123,7 +122,7 @@ loadModals().then(() => {
 <script type="module" src="src/game/logic.js"></script>
 <script type="text/javascript" src="src/game/profileData.js"></script>
 <script type="module" src="src/game/startup.js"></script>
-<script type="text/javascript" src="src/game/ui.js"></script>
+<script type="module" src="src/game/ui.js"></script>
 <script type="text/javascript" src="src/game/utility.js"></script>
 <script type="module" src="src/game/wikiData.js"></script>
 

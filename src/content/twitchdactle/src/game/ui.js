@@ -1,4 +1,4 @@
-class UI {
+export class UI {
 
     constructor(game) {
         this.game = game;
@@ -55,11 +55,14 @@ class UI {
 
     revealPage() {
         this.removeHighlights(false);
-        for (var i = 0; i < this.game.baffled.length; i++) {
+        for (let i = 0; i < this.game.baffled.length; i++) {
             this.game.baffled[i][1].reveal();
-            this.game.baffled[i][1].elements[0].element.classList.remove("baffled");
         }
         this.pageRevealed = true;
+    }
+
+    winRound(populate) {
+        this.game.logic.winRound(populate);
     }
 
     displayStats(index, gameAnswers, gameScores, gameAccuracy) {
@@ -89,7 +92,6 @@ class UI {
         this.numbersRevealed = true;
         for (let i = 0; i < this.baffledNumbers.length; i++) {
             this.baffledNumbers[i].reveal();
-            this.baffledNumbers[i].elements[0].element.classList.remove("baffled");
             const dataWord = this.baffledNumbers[i].elements[0].value;
             this.baffledNumbers[i].elements[0].element.setAttribute("data-word", dataWord);
             if (this.game.answer.includes(dataWord)) {

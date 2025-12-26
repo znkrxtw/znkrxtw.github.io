@@ -1,6 +1,7 @@
 import {StartUp} from './startup.js';
 import {Logic} from './logic.js';
 import {WikiData} from './wikiData.js';
+import {UI} from './ui.js';
 
 class TwitchDactleGame {
 
