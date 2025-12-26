@@ -1,4 +1,7 @@
-class Logic {
+import { commonWords } from '../commonWords.js';
+import {confetti} from "@tsparticles/confetti";
+
+export class Logic {
 
     constructor(game) {
         this.game = game;
@@ -137,7 +140,7 @@ class Logic {
                     this.clickThruIndex = 0;
                     this.currentlyHighlighted = inTxt;
                     newRow.classList.add('table-secondary');
-                    document.querySelectorAll('.innerTxt').forEach( (element) => {
+                    document.querySelectorAll('.innerTxt').forEach((element) => {
                         if (element.innerHTML.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase() === this.currentlyHighlighted) {
                             element.classList.add('highlighted');
                         }
@@ -155,7 +158,7 @@ class Logic {
                         this.currentlyHighlighted = inTxt;
                     }
                 }
-                document.querySelectorAll('.superHighlighted').forEach( (element) => {
+                document.querySelectorAll('.superHighlighted').forEach((element) => {
                     element.classList.remove('superHighlighted');
                 });
                 allInstances[this.clickThruIndex % allInstances.length].classList.add('superHighlighted');

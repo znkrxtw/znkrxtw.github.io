@@ -1,3 +1,7 @@
+import 'bootstrap';
+import { Modal } from 'bootstrap';
+import ComfyJS from 'https://esm.sh/comfy.js';
+
 export class StartUp {
 
     constructor(game) {
@@ -20,10 +24,10 @@ export class StartUp {
     }
 
     init() {
-        const infoModal = new bootstrap.Modal(document.getElementById('infoModal'));
-        const settingsModal = new bootstrap.Modal(document.getElementById('settingsModal'));
-        const statsModal = new bootstrap.Modal(document.getElementById('statsModal'));
-        const revealModal = new bootstrap.Modal(document.getElementById('revealModal'));
+        const infoModal = new Modal(document.getElementById('infoModal'));
+        const settingsModal = new Modal(document.getElementById('settingsModal'));
+        const statsModal = new Modal(document.getElementById('statsModal'));
+        const revealModal = new Modal(document.getElementById('revealModal'));
 
         const input = document.getElementById("userGuess");
         input.addEventListener("keyup",  (event) => {

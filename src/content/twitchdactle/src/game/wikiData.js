@@ -1,13 +1,14 @@
-﻿class WikiData {
+import { Logic } from './logic.js';
+import { commonWords } from '../commonWords.js';
+import baffle from 'baffle';
+
+export class WikiData {
 
     constructor(game) {
         this.game = game;
         this.wikiHolder = game.wikiHolder;
         this.profileData = game.profileData;
         this.ui = game.ui;
-        this.logic = game.logic;
-
-
     }
 
     async fetchData(retry, artStr) {
@@ -130,20 +131,16 @@
                     this.extracted();
 
                     if (this.profileData.guessedWords.length > 0) {
-                        for (var i = 0; i < this.profileData.guessedWords.length; i++) {
+                        for (let i = 0; i < this.profileData.guessedWords.length; i++) {
                             this.game.guessCounter += 1;
-                            this.logic.performGuess(this.profileData.guessedWords[i][0], true);
+                            this.game.performGuess(this.profileData.guessedWords[i][0], true);
                         }
                     }
                     if (this.profileData.numbersRevealed) {
                         this.ui.revealNumbers();
                     }
 
-                    if (window.pluralizing) {
-                        document.getElementById("autoPlural").checked = true;
-                    } else {
-                        document.getElementById("autoPlural").checked = false;
-                    }
+                    document.getElementById("autoPlural").checked = !!window.pluralizing;
 
                     if (this.profileData.hidingZero) {
                         document.getElementById("hideZero").checked = true;
@@ -155,10 +152,10 @@
 
                     if (this.profileData.selectedArticles === 'custom') {
                         document.getElementById("selectArticle").value = 'custom';
-                        this.logic.selectArticlesCustom();
+                        this.game.selectArticlesCustom();
                     } else {
                         document.getElementById("selectArticle").value = 'standard';
-                        this.logic.selectArticlesStandard();
+                        this.game.selectArticlesStandard();
                     }
 
                     document.getElementById("streamName").value = this.profileData.streamName;
@@ -201,7 +198,7 @@
             el.setAttribute('word-length', txt.length);
 
             // create baffle instance and store it
-            const b = window.baffle(el).once().set({ characters: 'abcd' });
+            const b = baffle(el).once().set({ characters: 'abcd' });
             this.game.baffled.push([txt, b]);
 
             // track numeric tokens separately (preserves original logic)

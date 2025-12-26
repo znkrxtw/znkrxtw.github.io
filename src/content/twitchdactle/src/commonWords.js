@@ -26,7 +26,6 @@ const commonWords = ["a",
     "by",
     "concerning",
     "considering",
-    "contemporary",
     "despite",
     "down",
     "during",
@@ -152,3 +151,5 @@ const commonWords = ["a",
     "other",
     "another"
 ]
+
+export { commonWords };
