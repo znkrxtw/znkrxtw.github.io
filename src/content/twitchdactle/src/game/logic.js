@@ -1,4 +1,5 @@
 import { commonWords } from '../commonWords.js';
+import {confetti} from "@tsparticles/confetti";
 
 export class Logic {
 

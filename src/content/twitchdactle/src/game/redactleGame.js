@@ -12,6 +12,7 @@ class TwitchDactleGame {
         this.ui = dependencies.ui || new UI(this);
         this.utility = dependencies.utility || new Utility();
         this.profileData = dependencies.profileData || new ProfileData(this);
+        this.logic = dependencies.logic || new Logic(this);
         this.startUp = dependencies.startUp || new StartUp(this);
 
         // Wait for modals to be loaded before initializing
@@ -24,7 +25,7 @@ class TwitchDactleGame {
         this.profileData.loadSave(this);
 
         if (!this.profileData.articleName) {
-            this.profileData.articleName = Logic.getArticleName();
+            this.profileData.articleName = this.logic.getArticleName();
         }
 
         this.wikiData = new WikiData(this);

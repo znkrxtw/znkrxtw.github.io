@@ -24,7 +24,7 @@ async function copyRecursive(src, dest, exclude = []) {
   }
 }
 
-// Copy src to public (excluding vendor.js and ES modules)
-await copyRecursive(srcDir, publicDir, ['vendor.js', 'startup.js', 'redactleGame.js', 'main-entry.js']);
+// Copy src to public
+await copyRecursive(srcDir, publicDir, ['startup.js', 'redactleGame.js', 'main-entry.js']);
 
 console.log('✓ Synced src files to public folder');

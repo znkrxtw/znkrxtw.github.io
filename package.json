@@ -15,6 +15,7 @@
   "dependencies": {
     "@tsparticles/confetti": "^3.9.1",
     "baffle": "^0.3.6",
+    "bootstrap": "^5.3.8",
     "comfy.js": "^1.1.29"
   }
 }

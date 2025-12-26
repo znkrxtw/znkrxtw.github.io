@@ -1,5 +1,6 @@
 import { Logic } from './logic.js';
 import { commonWords } from '../commonWords.js';
+import baffle from 'baffle';
 
 export class WikiData {
 
@@ -130,20 +131,16 @@ export class WikiData {
                     this.extracted();
 
                     if (this.profileData.guessedWords.length > 0) {
-                        for (var i = 0; i < this.profileData.guessedWords.length; i++) {
+                        for (let i = 0; i < this.profileData.guessedWords.length; i++) {
                             this.game.guessCounter += 1;
-                            Logic.performGuess(this.profileData.guessedWords[i][0], true);
+                            this.game.performGuess(this.profileData.guessedWords[i][0], true);
                         }
                     }
                     if (this.profileData.numbersRevealed) {
                         this.ui.revealNumbers();
                     }
 
-                    if (window.pluralizing) {
-                        document.getElementById("autoPlural").checked = true;
-                    } else {
-                        document.getElementById("autoPlural").checked = false;
-                    }
+                    document.getElementById("autoPlural").checked = !!window.pluralizing;
 
                     if (this.profileData.hidingZero) {
                         document.getElementById("hideZero").checked = true;
@@ -155,10 +152,10 @@ export class WikiData {
 
                     if (this.profileData.selectedArticles === 'custom') {
                         document.getElementById("selectArticle").value = 'custom';
-                        Logic.selectArticlesCustom();
+                        this.game.selectArticlesCustom();
                     } else {
                         document.getElementById("selectArticle").value = 'standard';
-                        Logic.selectArticlesStandard();
+                        this.game.selectArticlesStandard();
                     }
 
                     document.getElementById("streamName").value = this.profileData.streamName;
@@ -201,7 +198,7 @@ export class WikiData {
             el.setAttribute('word-length', txt.length);
 
             // create baffle instance and store it
-            const b = window.baffle(el).once().set({ characters: 'abcd' });
+            const b = baffle(el).once().set({ characters: 'abcd' });
             this.game.baffled.push([txt, b]);
 
             // track numeric tokens separately (preserves original logic)
