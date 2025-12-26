@@ -198,27 +198,14 @@ export class WikiData {
             el.setAttribute('word-length', txt.length);
 
             // create baffle instance and store it
-            const b = baffle(el).once().set({ characters: 'abcd' });
-            this.game.baffled.push([txt, b]);
+            const baffledInstance = baffle(el).once().set({ characters: 'abcd' });
+            this.game.baffled.push([txt, baffledInstance]);
 
             // track numeric tokens separately (preserves original logic)
             if (!isNaN(txt)) {
-                this.game.baffledNumbers.push(b);
+                this.game.baffledNumbers.push(baffledInstance);
             }
         });
-
-        // $(".mw-parser-output span").not(".punctuation").each((i, el) => {
-        //     const txt = el.innerHTML.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
-        //     if (!commonWords.includes(txt)) {
-        //         el.classList.toggle('baffled');
-        //         el.setAttribute('word-length', txt.length);
-        //         let b = baffle(el).once().set({characters: 'abcd'});
-        //         this.game.baffled.push([txt, b]);
-        //         if (!isNaN(txt)) {
-        //             this.game.baffledNumbers.push(b);
-        //         }
-        //     }
-        // });
     }
 
     punctuation(elements) {
