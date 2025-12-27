@@ -122,6 +122,10 @@ class ModalManager {
   showRevealPageModal(): Promise<void> {
     return this.showModal('revealPage');
   }
+
+  showNewGameModal(): Promise<void> {
+    return this.showModal('newGame');
+  }
 }
 
 // Export singleton instance

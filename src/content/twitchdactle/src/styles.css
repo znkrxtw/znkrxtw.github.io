@@ -27,10 +27,16 @@ body {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    border-left: solid 1px;
 }
 
 .guess-number-text {
     margin-right: 10px;
+    color: white;
+}
+
+#numberOfGuesses {
+    color: white;
 }
 
 .guess-hit-container {
@@ -41,7 +47,7 @@ body {
     border-top: solid 1px;
     border-bottom: solid 1px;
     background: #212529;
-    padding: 10px ;
+    padding: 10px;
 }
 
 .guess-number-container {
@@ -49,7 +55,6 @@ body {
     display: flex;
     flex-direction: row;
     background-color: #212529;
-    color: white;
     font-weight: bold;
     padding: 10px;
 }
@@ -58,11 +63,6 @@ body {
     border-radius: 2px;
     color: rgba(226, 226, 226);
     background-color: #5a5a5a;
-}
-
-.container.container-lg {
-    margin-left: 0;
-    margin-right: 0;
 }
 
 .baffled {
@@ -262,7 +262,7 @@ td {
     border-color: transparent;
 }
 
-@media (min-width:992px) {
+@media (min-width: 992px) {
     .navbar.fixed-right {
         top: 0;
         width: 30vw;
@@ -290,7 +290,7 @@ td {
     }
 }
 
-@media (min-width:992px) {
+@media (min-width: 992px) {
     .navbar.fixed-right {
         left: auto
     }
@@ -309,7 +309,7 @@ td {
     }
 }
 
-@media (max-width:992px) {
+@media (max-width: 992px) {
     #wikiHolder {
         overflow-x: hidden;
     }
@@ -405,8 +405,12 @@ td {
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 /* Back to Top Button Styles */
@@ -422,7 +426,7 @@ td {
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
     float: right;
     opacity: 0;
@@ -431,5 +435,5 @@ td {
 #backToTop:hover {
     background-color: #525252;
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }

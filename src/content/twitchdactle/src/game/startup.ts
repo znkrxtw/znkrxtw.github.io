@@ -58,24 +58,24 @@ export class StartUp {
         this.InitStreamName();
 
         document.getElementById('infoBtn')?.addEventListener('click', async () => {
-            await modalManager.showModal('info');
+            await modalManager.showInfoModal();
         });
 
         document.getElementById('statsBtn')?.addEventListener('click', async () => {
             this.logic.buildStats();
-            await modalManager.showModal('stats');
+            await modalManager.showStatsModal();
         });
 
         document.getElementById('settingsBtn')?.addEventListener('click', async () => {
-            await modalManager.showModal('settings');
+            await modalManager.showSettingsModal();
         });
 
         document.getElementById('newGameBtn')?.addEventListener('click', async () => {
-            await modalManager.showModal('newGame');
+            await modalManager.showNewGameModal();
         });
 
         document.getElementById('revealPageButton')?.addEventListener('click', async () => {
-            await modalManager.showModal('revealPage');
+            await modalManager.showRevealPageModal();
         });
 
         document.getElementById('revealNumbersButton')?.addEventListener('click', () => {

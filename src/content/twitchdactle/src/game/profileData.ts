@@ -22,14 +22,14 @@ export class ProfileData {
 
     //save prefs
     public hidingZero: boolean;
-    private hidingLog: boolean;
+    public hidingLog: boolean;
     public selectedArticles: string;
     public streamName: string;
     public pluralizing: boolean;
 
     constructor(gameInstance: any) {
         this.gameState = gameInstance.gameState;
-        this.saveString = "redactleSave";
+        this.saveString = "twitchDactleSave";
         this.save = {
             saveData: {
                 twitchDactleIndex: 0,
@@ -180,4 +180,3 @@ export class ProfileData {
         this.save.saveData.guessedWords = this.guessedWords;
     }
 }
-
