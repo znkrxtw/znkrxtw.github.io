@@ -1,8 +1,8 @@
-import {StartUp} from './startup.js';
-import {Logic} from './logic.js';
+import {StartUp} from './startup.ts';
+import {Logic} from './logic.ts';
 import {WikiData} from './wikiData.js';
 import {UI} from './ui.ts';
-import {ProfileData} from './profileData.js';
+import {ProfileData} from './profileData.ts';
 import {GameState} from './gameState.ts';
 
 export class TwitchDactleGame {

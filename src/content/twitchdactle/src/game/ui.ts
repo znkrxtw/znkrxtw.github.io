@@ -1,6 +1,6 @@
 import {IGame} from './types';
 import {GameState} from "@/content/twitchdactle/src/game/gameState.ts";
-import {Logic} from "@/content/twitchdactle/src/game/logic";
+import {Logic} from "@/content/twitchdactle/src/game/logic.ts";
 
 export class UI {
 
@@ -8,7 +8,8 @@ export class UI {
     private logic: Logic;
 
     public wikiHolder: HTMLElement | null;
-    public guessLogBody: HTMLElement | null;
+    public guessLogBody: HTMLTableElement | null;
+    public statLogBody: HTMLTableElement | null;
     private highlightedGuess: NodeListOf<Element>;
     private superHighlightedGuess: NodeListOf<Element>;
     private guessBody: NodeListOf<Element>;
@@ -27,8 +28,8 @@ export class UI {
 
         // DOM references
         this.wikiHolder = document.getElementById("wikiHolder");
-        this.guessLogBody = document.getElementById("guessLogBody");
-        // statLogBody will be initialized on-demand when needed
+        this.guessLogBody = document.getElementById("guessLogBody") as HTMLTableElement;
+        this.statLogBody = document.getElementById("statsTable") as HTMLTableElement;
 
         //guesses
         this.highlightedGuess = document.querySelectorAll('.highlighted');
@@ -84,7 +85,7 @@ export class UI {
         this.gameState.pageRevealed = true;
     }
 
-    displayStats(index: number, gameAnswers: [], gameScores: [], gameAccuracy: []) {
+    displayStats(index: number, gameAnswers: string[], gameScores: number[], gameAccuracy: string[]) {
         if (this.statRow) {
             this.statRow.insertRow(1);
             this.statRow.innerHTML = '<td>' + (index + 1) + '</td><td>' + gameAnswers[index] + '</td><td>' + gameScores[index] + '</td><td>' + gameAccuracy[index] + '%</td>';

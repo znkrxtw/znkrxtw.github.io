@@ -10,18 +10,18 @@ export class ProfileData {
 
     //save data
     private playerID: string | null;
-    private twitchDactleIndex: number;
-    private guessedWords: [];
+    public twitchDactleIndex: number;
+    public guessedWords: [string, number][];
     private numbersRevealed: boolean;
-    private gameAccuracy = [];
+    public gameAccuracy: string[] = [];
     public articleName: string;
-    private pageRevealed = false;
-    private gameWins = [];
-    private gameScores = [];
-    private gameAnswers = [];
+    public pageRevealed = false;
+    public gameWins: number[] = [];
+    public gameScores: number[] = [];
+    public gameAnswers: string[] = [];
 
     //save prefs
-    private hidingZero: boolean;
+    public hidingZero: boolean;
     private hidingLog: boolean;
     public selectedArticles: string;
     public streamName: string;
@@ -137,7 +137,7 @@ export class ProfileData {
         for (let i = 0; i < gameDelta; i++) {
             this.gameState.gameWins.push(0);
             this.gameState.gameScores.push(0);
-            this.gameState.gameAccuracy.push(0);
+            this.gameState.gameAccuracy.push('');
             this.gameState.gameAnswers.push('');
         }
 
@@ -174,6 +174,10 @@ export class ProfileData {
             },
             "id": {playerID: this.playerID}
         })) as SaveStructure;
+    }
+
+    updateGuesses() {
+        this.save.saveData.guessedWords = this.guessedWords;
     }
 }
 

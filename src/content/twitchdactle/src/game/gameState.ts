@@ -4,7 +4,7 @@ export class GameState {
     baffledNumbers: any[] = [];
     answer: string[] = [];
     guessCounter: number = 0;
-    ansStr?: string;
+    ansStr!: string;
 
     // UI interaction state
     currentlyHighlighted?: any;
@@ -26,7 +26,7 @@ export class GameState {
     //player data
     public gameWins!: number[];
     public gameScores!: number[];
-    public gameAccuracy!: number[];
+    public gameAccuracy!: string[];
     public hidingZero!: boolean;
     public selectedArticles!: string;
     public hidingLog!: boolean;
@@ -44,7 +44,7 @@ export class GameState {
         this.baffledNumbers = [];
         this.answer = [];
         this.guessCounter = 0;
-        this.ansStr = undefined;
+        this.ansStr = "";
 
         // UI interaction state
         this.currentlyHighlighted = undefined;

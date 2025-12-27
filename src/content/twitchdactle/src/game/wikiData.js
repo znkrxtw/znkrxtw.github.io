@@ -8,6 +8,7 @@ export class WikiData {
         this.wikiHolder = game.wikiHolder;
         this.profileData = game.profileData;
         this.ui = game.ui;
+        this.logic = game.logic;
     }
 
     async fetchData(retry, artStr) {
@@ -122,7 +123,7 @@ export class WikiData {
                     if (this.profileData.guessedWords.length > 0) {
                         for (let i = 0; i < this.profileData.guessedWords.length; i++) {
                             this.game.guessCounter += 1;
-                            this.game.performGuess(this.profileData.guessedWords[i][0], true);
+                            this.logic.performGuess(this.profileData.guessedWords[i][0], true);
                         }
                     }
                     if (this.profileData.numbersRevealed) {
@@ -141,10 +142,10 @@ export class WikiData {
 
                     if (this.profileData.selectedArticles === 'custom') {
                         document.getElementById("selectArticle").value = 'custom';
-                        this.game.selectArticlesCustom();
+                        this.logic.selectArticlesCustom();
                     } else {
                         document.getElementById("selectArticle").value = 'standard';
-                        this.game.selectArticlesStandard();
+                        this.logic.selectArticlesStandard();
                     }
 
                     document.getElementById("streamName").value = this.profileData.streamName;

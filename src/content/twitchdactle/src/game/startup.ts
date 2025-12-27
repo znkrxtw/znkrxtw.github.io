@@ -1,7 +1,7 @@
 import {modalManager} from '../modals';
 import {UI} from './ui.ts';
 import {ProfileData} from './profileData.ts';
-import {Logic} from './logic';
+import {Logic} from './logic.ts';
 import {GameState} from "./gameState.ts";
 import {IGame} from './types';
 

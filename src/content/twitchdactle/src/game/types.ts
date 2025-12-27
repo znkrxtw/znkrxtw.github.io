@@ -1,5 +1,5 @@
 import { UI } from './ui';
-import { Logic } from './logic';
+import { Logic } from './logic.ts';
 import { ProfileData } from './profileData';
 import { GameState } from './gameState';
 
@@ -13,12 +13,12 @@ export interface IGame {
 interface SaveData {
     twitchDactleIndex: number;
     articleName: string;
-    guessedWords: [];
+    guessedWords: [string, number][];
     numbersRevealed: boolean;
     pageRevealed: boolean;
     gameWins: number[];
     gameScores: number[];
-    gameAccuracy: number[];
+    gameAccuracy: string[];
     gameAnswers: string[];
 }
 
