@@ -41,7 +41,7 @@ export class WikiData {
                 this.ui.resetWikiHolder(cleanText);
                 const redirecting = document.getElementsByClassName('redirectMsg');
                 if (redirecting.length > 0) {
-                    const redirectURL = document.querySelectorAll('.redirectText')[0].firstChild.firstChild.innerHTML.replace(/ /g, "_");
+                    const redirectURL = (document.querySelectorAll('.redirectText')[0]?.firstChild?.firstChild as HTMLElement)?.innerHTML.replace(/ /g, "_");
                     this.counting = false;
                     this.fetchData(!this.counting, redirectURL);
                 }
@@ -56,7 +56,7 @@ export class WikiData {
                     }
                     const elements = document.getElementsByClassName('mw-parser-output');
                     if (seeAlso) {
-                        const alsoIndex = Array.prototype.indexOf.call(seeAlso.parentNode.children, seeAlso);
+                        const alsoIndex = Array.prototype.indexOf.call(seeAlso.parentNode?.children, seeAlso);
                         for (let i = alsoIndex; i < elements[0].children.length; i++) {
                             elements[0].removeChild(elements[0].children[i]);
                         }
@@ -146,32 +146,12 @@ export class WikiData {
                         this.ui.revealNumbers();
                     }
 
-                    document.getElementById("autoPlural").checked = !!window.pluralizing;
-
-                    if (this.profileData.hidingZero) {
-                        document.getElementById("hideZero").checked = true;
-                        this.ui.hideZero();
-                    } else {
-                        document.getElementById("hideZero").checked = false;
-                        this.ui.showZero();
-                    }
-
-                    if (this.profileData.selectedArticles === 'custom') {
-                        document.getElementById("selectArticle").value = 'custom';
-                        this.logic.selectArticlesCustom();
-                    } else {
-                        document.getElementById("selectArticle").value = 'standard';
-                        this.logic.selectArticlesStandard();
-                    }
-
-                    document.getElementById("streamName").value = this.profileData.streamName;
-
                     if (this.gameState.pageRevealed) {
                         this.logic.winRound(true);
                         this.profileData.saveProgress();
                     }
 
-                    this.ui.wikiHolder.style.display = "flex";
+                    this.ui.displayWikiHolder();
                     this.ui.hideSpinner();
                 }
             })
@@ -183,7 +163,7 @@ export class WikiData {
 
 
     hideWords() {
-        const root = this.ui.wikiHolder.querySelector('.mw-parser-output') || this.ui.wikiHolder;
+        const root = this.ui.wikiHolder?.querySelector('.mw-parser-output') || this.ui.wikiHolder;
         if (!root) return;
 
         // select all spans that are not already punctuation

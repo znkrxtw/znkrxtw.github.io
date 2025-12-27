@@ -46,6 +46,9 @@ export class UI {
         this.statRow = document.getElementById("statsTable") as HTMLTableElement;
 
         this.spinner = document.getElementById('loadingSpinner');
+
+
+
     }
 
     removeHighlights(clearCur: boolean) {
@@ -170,6 +173,12 @@ export class UI {
         if(this.wikiHolder) {
             this.wikiHolder.style.display = "none";
             this.wikiHolder.innerHTML = cleanText;
+        }
+    }
+
+    displayWikiHolder() {
+        if(this.wikiHolder) {
+            this.wikiHolder.style.display = "flex";
         }
     }
 

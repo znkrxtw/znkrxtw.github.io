@@ -110,7 +110,7 @@ export class Logic {
         }
         for (let i = 0; i < this.profileData.gameWins.length; i++) {
             if (this.profileData.gameWins[i] === 1) {
-                this.ui.displayStats(i, this.profileData.gameAnswers[i], this.profileData.gameScores[i], this.profileData.gameAccuracy[i]);
+                this.ui.displayStats(i, this.profileData.gameAnswers, this.profileData.gameScores, this.profileData.gameAccuracy);
             }
         }
     }

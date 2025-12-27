@@ -52,29 +52,58 @@ export class StartUp {
             }
         });
 
-        document.getElementById('hideZero')?.addEventListener('change', (event) => {
-            const target = event.target as HTMLInputElement;
-            target.checked ? this.ui.hideZero() : this.ui.showZero();
-            this.profileData.saveProgress();
-        });
+        const hideZero = document.getElementById('hideZero') as HTMLInputElement;
 
-        document.getElementById('autoPlural')?.addEventListener('change', (event) => {
-            const target = event.target as HTMLInputElement;
-            this.profileData.pluralizing = target.checked;
-            this.profileData.saveProgress();
-        });
+        if (hideZero) {
+            if (this.profileData.hidingZero) {
+                hideZero.checked = this.profileData.hidingZero;
+                this.ui.hideZero();
+            } else {
+                hideZero.checked = false;
+                this.ui.showZero();
+            }
 
-        document.getElementById('selectArticle')?.addEventListener('change', (event) => {
-            const target = event.target as HTMLSelectElement;
-            this.profileData.selectedArticles = target.value === 'custom' ? 'custom' : 'standard';
-            this.profileData.saveProgress();
-        });
+            hideZero.addEventListener('change', (event) => {
+                const target = event.target as HTMLInputElement;
+                target.checked ? this.ui.hideZero() : this.ui.showZero();
+                this.profileData.saveProgress();
+            });
+        }
 
-        document.getElementById('streamName')?.addEventListener('change', (event) => {
-            const target = event.target as HTMLInputElement;
-            this.profileData.streamName = target.value;
-            this.profileData.saveProgress();
-        });
+        const autoPlural = document.getElementById('autoPlural') as HTMLInputElement;
+
+        if (autoPlural) {
+            autoPlural.checked = this.profileData.pluralizing;
+
+            autoPlural?.addEventListener('change', (event) => {
+                const target = event.target as HTMLInputElement;
+                this.profileData.pluralizing = target.checked;
+                this.profileData.saveProgress();
+            });
+        }
+
+        const selectedArticle = document.getElementById('selectArticle') as HTMLSelectElement;
+        if (selectedArticle) {
+            selectedArticle.value = this.profileData.selectedArticles;
+
+            selectedArticle.addEventListener('change', (event) => {
+                const target = event.target as HTMLSelectElement;
+                this.profileData.selectedArticles = target.value === 'custom' ? 'custom' : 'standard';
+                this.profileData.saveProgress();
+            });
+        }
+
+
+        const streamName = document.getElementById('streamName') as HTMLInputElement;
+        if (streamName) {
+            streamName.value = this.profileData.streamName;
+
+            streamName.addEventListener('change', (event) => {
+                const target = event.target as HTMLInputElement;
+                this.profileData.streamName = target.value;
+                this.profileData.saveProgress();
+            });
+        }
 
         document.getElementById('infoBtn')?.addEventListener('click', async () => {
             await modalManager.showModal('info');
