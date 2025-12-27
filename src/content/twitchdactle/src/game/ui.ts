@@ -165,4 +165,25 @@ export class UI {
             textBox.style.display = 'block';
         }
     }
+
+    resetWikiHolder(cleanText: string) {
+        if(this.wikiHolder) {
+            this.wikiHolder.style.display = "none";
+            this.wikiHolder.innerHTML = cleanText;
+        }
+    }
+
+    getAllBadElements() {
+        return this.wikiHolder?.querySelectorAll("[rel='mw-deduplicated-inline-style'], [title='Name at birth'], [aria-labelledby='micro-periodic-table-title'], .barbox, .wikitable, .clade, .Expand_section, .nowrap, .IPA, .thumb, .mw-empty-elt, .mw-editsection, .nounderlines, .nomobile, .searchaux, #toc, .sidebar, .sistersitebox, .noexcerpt, #External_links, #Further_reading, .hatnote, .haudio, .portalbox, .mw-references-wrap, .infobox, .unsolved, .navbox, .metadata, .refbegin, .reflist, .mw-stack, #Notes, #References, .reference, .quotebox, .collapsible, .uncollapsed, .mw-collapsible, .mw-made-collapsible, .mbox-small, .mbox, #coordinates, .succession-box, .noprint, .mwe-math-element, .cs1-ws-icon");
+    }
+
+    getAlAnchorElements() {
+        return  this.wikiHolder?.getElementsByTagName('a');
+    }
+
+    replaceInnerHtml() {
+        if(this.wikiHolder) {
+            this.wikiHolder.innerHTML = this.wikiHolder.innerHTML.replace(/<!--(?!>)[\S\s]*?-->/g, '');
+        }
+    }
 }

@@ -12,7 +12,7 @@ export class ProfileData {
     private playerID: string | null;
     public twitchDactleIndex: number;
     public guessedWords: [string, number][];
-    private numbersRevealed: boolean;
+    public numbersRevealed: boolean;
     public gameAccuracy: string[] = [];
     public articleName: string;
     public pageRevealed = false;

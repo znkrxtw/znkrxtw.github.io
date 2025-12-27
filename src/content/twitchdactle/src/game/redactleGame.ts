@@ -1,6 +1,6 @@
 import {StartUp} from './startup.ts';
 import {Logic} from './logic.ts';
-import {WikiData} from './wikiData.js';
+import {WikiData} from './wikiData.ts';
 import {UI} from './ui.ts';
 import {ProfileData} from './profileData.ts';
 import {GameState} from './gameState.ts';
