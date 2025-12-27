@@ -135,7 +135,7 @@ export class Logic {
         if (guess[1] > 0) {
             newRow.addEventListener('click', (e) => {
                 e.preventDefault();
-                const inTxt = this.game.ui.getInnerTextFromRow(this, newRow, 1);
+                const inTxt = this.game.ui.getInnerTextFromRow(newRow, 1);
                 const allInstances = this.game.ui.wikiHolder.querySelectorAll('[data-word="' + inTxt + '"]');
                 if (this.currentlyHighlighted == null) {
                     this.clickThruIndex = 0;

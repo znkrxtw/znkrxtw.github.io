@@ -4,6 +4,7 @@ export class WikiData {
 
     constructor(game) {
         this.game = game;
+        this.gameState = game.gameState;
         this.wikiHolder = game.wikiHolder;
         this.profileData = game.profileData;
         this.ui = game.ui;
@@ -11,8 +12,7 @@ export class WikiData {
 
     async fetchData(retry, artStr) {
         const article = retry ? artStr : atob(artStr);
-        document.querySelector('.mw-parser-output').style.display = 'none';
-        this.ui.spinner.classList.add('visible');
+        this.ui.showSpinner();
         return await fetch('https://en.wikipedia.org/w/api.php?action=parse&format=json&page=' + article + '&prop=text&formatversion=2&origin=*')
             .then(resp => {
                 if (!resp.ok) {
@@ -117,7 +117,7 @@ export class WikiData {
                     this.ui.wikiHolder.innerHTML = this.ui.wikiHolder.innerHTML.replace(/<!--(?!>)[\S\s]*?-->/g, '');
 
                     this.game.gameIsActive = true;
-                    this.extracted();
+                    this.hideWords();
 
                     if (this.profileData.guessedWords.length > 0) {
                         for (let i = 0; i < this.profileData.guessedWords.length; i++) {
@@ -150,7 +150,7 @@ export class WikiData {
                     document.getElementById("streamName").value = this.profileData.streamName;
 
                     if (this.ui.pageRevealed) {
-                        this.ui.winRound(true);
+                        this.logic.winRound(true);
                         this.profileData.saveProgress();
                     }
 
@@ -161,13 +161,13 @@ export class WikiData {
             })
             .catch(err => {
                 console.error("Error in while getting article: ", err);
-                this.ui.spinner.classList.remove('visible');
-                document.querySelector('.mw-parser-output').style.display = 'block';
+                this.ui.hideSpinner();
+
             });
     }
 
 
-    extracted() {
+    hideWords() {
         const root = this.ui.wikiHolder.querySelector('.mw-parser-output') || this.ui.wikiHolder;
         if (!root) return;
 
@@ -200,7 +200,7 @@ export class WikiData {
                 reveal: function() {el.textContent = this.originalText; }
             };
 
-            this.game.baffled.push([txt, baffledInstance]);
+            this.gameState.baffled.push([txt, baffledInstance]);
 
             // track numeric tokens separately (preserves original logic)
             if (!isNaN(txt)) {

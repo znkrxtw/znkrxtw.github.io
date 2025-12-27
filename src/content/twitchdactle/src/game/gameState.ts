@@ -1,7 +1,7 @@
 export class GameState {
 
-    baffled: string[] = [];
-    baffledNumbers: number[] = [];
+    baffled: [string, any][] = [];
+    baffledNumbers: any[] = [];
     answer: string[] = [];
     guessCounter: number = 0;
     ansStr?: string;
@@ -21,6 +21,7 @@ export class GameState {
     loadingIcon?: any;
     gameIsActive: boolean = false;
     pageRevealed: boolean = false;
+    numbersRevealed: boolean = false;
 
     //player data
     public gameWins!: number[];
@@ -99,10 +100,6 @@ export class GameState {
 
     setAnswer(answerString: string): void {
         this.ansStr = answerString;
-    }
-
-    addBaffledWord(word: string): void {
-        this.baffled.push(word);
     }
 
     addBaffledNumber(number: number): void {

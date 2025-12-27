@@ -1,17 +1,9 @@
-import 'bootstrap';
-import { modalManager } from '../modals';
-import {UI} from './ui';
+import {modalManager} from '../modals';
+import {UI} from './ui.ts';
 import {ProfileData} from './profileData.ts';
 import {Logic} from './logic';
 import {GameState} from "./gameState.ts";
-
-// Game interface to break circular dependency
-interface IGame {
-    ui: UI;
-    profileData: ProfileData;
-    logic: Logic;
-    gameState: GameState;
-}
+import {IGame} from './types';
 
 export class StartUp {
 
@@ -34,7 +26,7 @@ export class StartUp {
     init() {
 
         const input = document.getElementById("userGuess") as HTMLInputElement;
-        input?.addEventListener("keyup",  (event) => {
+        input?.addEventListener("keyup", (event) => {
             if (event.key === "Enter" && event.shiftKey) {
                 event.preventDefault();
                 const pluralizing = (this.profileData.pluralizing !== event.shiftKey);
@@ -60,9 +52,9 @@ export class StartUp {
             }
         });
 
-        document.getElementById('hideZero')?.addEventListener('change',  (event) => {
+        document.getElementById('hideZero')?.addEventListener('change', (event) => {
             const target = event.target as HTMLInputElement;
-            target.checked ? this.ui.hideZero(): this.ui.showZero();
+            target.checked ? this.ui.hideZero() : this.ui.showZero();
             this.profileData.saveProgress();
         });
 
@@ -111,7 +103,7 @@ export class StartUp {
         });
 
         document.querySelectorAll('.closeInfo').forEach((element) => {
-            element.addEventListener('click',  async () => {
+            element.addEventListener('click', async () => {
                 (document.activeElement as HTMLElement).blur();
                 await modalManager.hideModal('info');
                 document.body.style.overflow = "auto";
@@ -130,7 +122,7 @@ export class StartUp {
         });
 
         document.querySelectorAll('.closeStats').forEach(function (element) {
-            element.addEventListener('click', async ()=> {
+            element.addEventListener('click', async () => {
                 (document.activeElement as HTMLElement).blur();
                 await modalManager.hideModal('stats');
                 document.body.style.overflow = "auto";
@@ -145,8 +137,8 @@ export class StartUp {
             });
         });
 
-        document.querySelectorAll('.doReveal').forEach( (element) => {
-            element.addEventListener('click', async() => {
+        document.querySelectorAll('.doReveal').forEach((element) => {
+            element.addEventListener('click', async () => {
                 this.logic.winRound(false);
                 (document.activeElement as HTMLElement).blur();
                 await modalManager.hideModal('revealPage');
@@ -159,17 +151,17 @@ export class StartUp {
             document.documentElement.scrollTop = 0;
         });
 
-        document.getElementById('newGame')?.addEventListener('click',  () => {
+        document.getElementById('newGame')?.addEventListener('click', () => {
             this.profileData.newGame();
             this.ui.disableUserGuess();
             this.ui.emptyGuessBody();
         });
 
-        this.ui.navBarButton?.addEventListener('click',  () => {
+        this.ui.navBarButton?.addEventListener('click', () => {
             this.ui.toggleNavBar();
         });
 
-        window.onclick = async(event) => {
+        window.onclick = async (event) => {
             if (event.target === document.getElementById("infoModal")) {
                 (document.activeElement as HTMLElement).blur();
                 await modalManager.hideModal('info');
@@ -200,7 +192,7 @@ export class StartUp {
     async initComfyJS() {
         try {
             const ComfyJS = await import('comfy.js');
-            
+
             ComfyJS.default.onChat = (message) => {
                 const firstWord = [message.split(' ')[0]];
                 const autoPlural = document.getElementById('autoPlural') as HTMLInputElement;
@@ -213,7 +205,7 @@ export class StartUp {
                     this.gameState.newGame();
                 }
             };
-            
+
             this.ComfyJS = ComfyJS;
 
             this.connectStream();
