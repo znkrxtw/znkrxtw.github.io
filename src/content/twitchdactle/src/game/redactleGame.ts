@@ -1,9 +1,8 @@
-import {StartUp} from './startup.js';
-import {Logic} from './logic.js';
-import {WikiData} from './wikiData.js';
-import {UI} from './ui.js';
-import {Utility} from './utility.js';
-import {ProfileData} from './profileData.js';
+import {StartUp} from './startup.ts';
+import {Logic} from './logic.ts';
+import {WikiData} from './wikiData.ts';
+import {UI} from './ui.ts';
+import {ProfileData} from './profileData.ts';
 import {GameState} from './gameState.ts';
 
 export class TwitchDactleGame {
@@ -16,7 +15,6 @@ export class TwitchDactleGame {
     constructor() {
         this.gameState = new GameState();
         this.ui = new UI(this);
-        new Utility();
         this.profileData = new ProfileData(this);
         this.logic = new Logic(this);
         this.wikiData = new WikiData(this);

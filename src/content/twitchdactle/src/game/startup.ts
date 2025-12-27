@@ -1,17 +1,9 @@
-import 'bootstrap';
-import { modalManager } from '../modals';
-import {UI} from './ui';
+import {modalManager} from '../modals';
+import {UI} from './ui.ts';
 import {ProfileData} from './profileData.ts';
-import {Logic} from './logic';
+import {Logic} from './logic.ts';
 import {GameState} from "./gameState.ts";
-
-// Game interface to break circular dependency
-interface IGame {
-    ui: UI;
-    profileData: ProfileData;
-    logic: Logic;
-    gameState: GameState;
-}
+import {IGame} from './types';
 
 export class StartUp {
 
@@ -34,7 +26,7 @@ export class StartUp {
     init() {
 
         const input = document.getElementById("userGuess") as HTMLInputElement;
-        input?.addEventListener("keyup",  (event) => {
+        input?.addEventListener("keyup", (event) => {
             if (event.key === "Enter" && event.shiftKey) {
                 event.preventDefault();
                 const pluralizing = (this.profileData.pluralizing !== event.shiftKey);
@@ -60,29 +52,58 @@ export class StartUp {
             }
         });
 
-        document.getElementById('hideZero')?.addEventListener('change',  (event) => {
-            const target = event.target as HTMLInputElement;
-            target.checked ? this.ui.hideZero(): this.ui.showZero();
-            this.profileData.saveProgress();
-        });
+        const hideZero = document.getElementById('hideZero') as HTMLInputElement;
 
-        document.getElementById('autoPlural')?.addEventListener('change', (event) => {
-            const target = event.target as HTMLInputElement;
-            this.profileData.pluralizing = target.checked;
-            this.profileData.saveProgress();
-        });
+        if (hideZero) {
+            if (this.profileData.hidingZero) {
+                hideZero.checked = this.profileData.hidingZero;
+                this.ui.hideZero();
+            } else {
+                hideZero.checked = false;
+                this.ui.showZero();
+            }
 
-        document.getElementById('selectArticle')?.addEventListener('change', (event) => {
-            const target = event.target as HTMLSelectElement;
-            this.profileData.selectedArticles = target.value === 'custom' ? 'custom' : 'standard';
-            this.profileData.saveProgress();
-        });
+            hideZero.addEventListener('change', (event) => {
+                const target = event.target as HTMLInputElement;
+                target.checked ? this.ui.hideZero() : this.ui.showZero();
+                this.profileData.saveProgress();
+            });
+        }
 
-        document.getElementById('streamName')?.addEventListener('change', (event) => {
-            const target = event.target as HTMLInputElement;
-            this.profileData.streamName = target.value;
-            this.profileData.saveProgress();
-        });
+        const autoPlural = document.getElementById('autoPlural') as HTMLInputElement;
+
+        if (autoPlural) {
+            autoPlural.checked = this.profileData.pluralizing;
+
+            autoPlural?.addEventListener('change', (event) => {
+                const target = event.target as HTMLInputElement;
+                this.profileData.pluralizing = target.checked;
+                this.profileData.saveProgress();
+            });
+        }
+
+        const selectedArticle = document.getElementById('selectArticle') as HTMLSelectElement;
+        if (selectedArticle) {
+            selectedArticle.value = this.profileData.selectedArticles;
+
+            selectedArticle.addEventListener('change', (event) => {
+                const target = event.target as HTMLSelectElement;
+                this.profileData.selectedArticles = target.value === 'custom' ? 'custom' : 'standard';
+                this.profileData.saveProgress();
+            });
+        }
+
+
+        const streamName = document.getElementById('streamName') as HTMLInputElement;
+        if (streamName) {
+            streamName.value = this.profileData.streamName;
+
+            streamName.addEventListener('change', (event) => {
+                const target = event.target as HTMLInputElement;
+                this.profileData.streamName = target.value;
+                this.profileData.saveProgress();
+            });
+        }
 
         document.getElementById('infoBtn')?.addEventListener('click', async () => {
             await modalManager.showModal('info');
@@ -111,7 +132,7 @@ export class StartUp {
         });
 
         document.querySelectorAll('.closeInfo').forEach((element) => {
-            element.addEventListener('click',  async () => {
+            element.addEventListener('click', async () => {
                 (document.activeElement as HTMLElement).blur();
                 await modalManager.hideModal('info');
                 document.body.style.overflow = "auto";
@@ -130,7 +151,7 @@ export class StartUp {
         });
 
         document.querySelectorAll('.closeStats').forEach(function (element) {
-            element.addEventListener('click', async ()=> {
+            element.addEventListener('click', async () => {
                 (document.activeElement as HTMLElement).blur();
                 await modalManager.hideModal('stats');
                 document.body.style.overflow = "auto";
@@ -145,8 +166,8 @@ export class StartUp {
             });
         });
 
-        document.querySelectorAll('.doReveal').forEach( (element) => {
-            element.addEventListener('click', async() => {
+        document.querySelectorAll('.doReveal').forEach((element) => {
+            element.addEventListener('click', async () => {
                 this.logic.winRound(false);
                 (document.activeElement as HTMLElement).blur();
                 await modalManager.hideModal('revealPage');
@@ -159,17 +180,17 @@ export class StartUp {
             document.documentElement.scrollTop = 0;
         });
 
-        document.getElementById('newGame')?.addEventListener('click',  () => {
+        document.getElementById('newGame')?.addEventListener('click', () => {
             this.profileData.newGame();
             this.ui.disableUserGuess();
             this.ui.emptyGuessBody();
         });
 
-        this.ui.navBarButton?.addEventListener('click',  () => {
+        this.ui.navBarButton?.addEventListener('click', () => {
             this.ui.toggleNavBar();
         });
 
-        window.onclick = async(event) => {
+        window.onclick = async (event) => {
             if (event.target === document.getElementById("infoModal")) {
                 (document.activeElement as HTMLElement).blur();
                 await modalManager.hideModal('info');
@@ -200,7 +221,7 @@ export class StartUp {
     async initComfyJS() {
         try {
             const ComfyJS = await import('comfy.js');
-            
+
             ComfyJS.default.onChat = (message) => {
                 const firstWord = [message.split(' ')[0]];
                 const autoPlural = document.getElementById('autoPlural') as HTMLInputElement;
@@ -213,7 +234,7 @@ export class StartUp {
                     this.gameState.newGame();
                 }
             };
-            
+
             this.ComfyJS = ComfyJS;
 
             this.connectStream();

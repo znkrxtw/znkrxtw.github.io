@@ -1,10 +1,10 @@
 export class GameState {
 
-    baffled: string[] = [];
-    baffledNumbers: number[] = [];
+    baffled: [string, any][] = [];
+    baffledNumbers: any[] = [];
     answer: string[] = [];
     guessCounter: number = 0;
-    ansStr?: string;
+    ansStr!: string;
 
     // UI interaction state
     currentlyHighlighted?: any;
@@ -21,11 +21,12 @@ export class GameState {
     loadingIcon?: any;
     gameIsActive: boolean = false;
     pageRevealed: boolean = false;
+    numbersRevealed: boolean = false;
 
     //player data
     public gameWins!: number[];
     public gameScores!: number[];
-    public gameAccuracy!: number[];
+    public gameAccuracy!: string[];
     public hidingZero!: boolean;
     public selectedArticles!: string;
     public hidingLog!: boolean;
@@ -43,7 +44,7 @@ export class GameState {
         this.baffledNumbers = [];
         this.answer = [];
         this.guessCounter = 0;
-        this.ansStr = undefined;
+        this.ansStr = "";
 
         // UI interaction state
         this.currentlyHighlighted = undefined;
@@ -99,10 +100,6 @@ export class GameState {
 
     setAnswer(answerString: string): void {
         this.ansStr = answerString;
-    }
-
-    addBaffledWord(word: string): void {
-        this.baffled.push(word);
     }
 
     addBaffledNumber(number: number): void {

@@ -1,63 +1,33 @@
 import {GameState} from './gameState';
-
-interface SaveData {
-    twitchDactleIndex: number;
-    articleName: string;
-    guessedWords: [];
-    numbersRevealed: boolean;
-    pageRevealed: boolean;
-    gameWins: number[];
-    gameScores: number[];
-    gameAccuracy: number[];
-    gameAnswers: string[];
-}
-
-interface SavePrefs {
-    hidingZero: boolean;
-    hidingLog: boolean;
-    selectedArticles: string;
-    streamName: string;
-    pluralizing: boolean;
-}
-
-interface SaveId {
-    playerID?: string;
-}
-
-interface SaveStructure {
-    saveData: SaveData;
-    prefs: SavePrefs;
-    id: SaveId;
-}
+import {uuidv7} from 'uuidv7';
+import {SaveStructure} from './types';
 
 export class ProfileData {
 
     private readonly saveString: string;
     private save: SaveStructure;
-    private utility: any;
     private gameState: GameState;
 
     //save data
     private playerID: string | null;
-    private twitchDactleIndex: number;
-    private guessedWords: [];
-    private numbersRevealed: boolean;
-    private gameAccuracy = [];
+    public twitchDactleIndex: number;
+    public guessedWords: [string, number][];
+    public numbersRevealed: boolean;
+    public gameAccuracy: string[] = [];
     public articleName: string;
-    private pageRevealed = false;
-    private gameWins = [];
-    private gameScores = [];
-    private gameAnswers = [];
+    public pageRevealed = false;
+    public gameWins: number[] = [];
+    public gameScores: number[] = [];
+    public gameAnswers: string[] = [];
 
     //save prefs
-    private hidingZero: boolean;
+    public hidingZero: boolean;
     private hidingLog: boolean;
     public selectedArticles: string;
     public streamName: string;
     public pluralizing: boolean;
 
     constructor(gameInstance: any) {
-        this.utility = gameInstance.utility;
         this.gameState = gameInstance.gameState;
         this.saveString = "redactleSave";
         this.save = {
@@ -167,7 +137,7 @@ export class ProfileData {
         for (let i = 0; i < gameDelta; i++) {
             this.gameState.gameWins.push(0);
             this.gameState.gameScores.push(0);
-            this.gameState.gameAccuracy.push(0);
+            this.gameState.gameAccuracy.push('');
             this.gameState.gameAnswers.push('');
         }
 
@@ -180,7 +150,7 @@ export class ProfileData {
 
     createNewSave() {
         localStorage.clear();
-        this.playerID = this.utility.uuidv4();
+        this.playerID = uuidv7();
         this.articleName = "";
         this.twitchDactleIndex = 0;
         this.save = JSON.parse(JSON.stringify({
@@ -204,6 +174,10 @@ export class ProfileData {
             },
             "id": {playerID: this.playerID}
         })) as SaveStructure;
+    }
+
+    updateGuesses() {
+        this.save.saveData.guessedWords = this.guessedWords;
     }
 }
 

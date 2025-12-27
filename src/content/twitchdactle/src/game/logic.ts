@@ -1,31 +1,45 @@
-import { commonWords } from '../helper/commonWords.js';
-import { articles } from '../helper/articleNames.js';
-import { customArticles } from '../helper/customArticleNames.js';
+import {commonWords} from '../helper/commonWords.js';
+import {articles} from '../helper/articleNames.js';
+import {customArticles} from '../helper/customArticleNames.js';
 import {confetti} from "@tsparticles/confetti";
 import pluralize from "pluralize";
+import {IGame} from "@/content/twitchdactle/src/game/types.ts";
+import {ProfileData} from "@/content/twitchdactle/src/game/profileData.ts";
+import {GameState} from "@/content/twitchdactle/src/game/gameState.ts";
+import {UI} from "@/content/twitchdactle/src/game/ui.ts";
 
 export class Logic {
 
-    constructor(game) {
-        this.game = game;
-        this.profileData = game.profileData;
+    private profileData: ProfileData;
+    private gameState: GameState;
+    private ui: UI;
 
-        // expose methods on the game instance so existing callers keep working
-        this.game.performGuess = (guessedWord, populate) => this.performGuess(guessedWord, populate);
-        this.game.selectArticlesStandard = () => this.selectArticlesStandard();
-        this.game.selectArticlesCustom = () => this.selectArticlesCustom();
+    private clickThruIndex: number;
+    private currentlyHighlighted: string | null;
+    private guessCounter: number;
+    private hitCounter: number;
+    private currentAccuracy: string;
+
+    constructor(game: IGame) {
+        this.profileData = game.profileData;
+        this.gameState = game.gameState;
+        this.ui = game.ui;
+
+        this.clickThruIndex = 0;
+        this.currentlyHighlighted = null;
+        this.guessCounter = 0;
+        this.hitCounter = 0;
+        this.currentAccuracy = "";
     }
 
-    performGuess(guessedWord, populate) {
-        if (!this.game.gameIsActive) {
+    performGuess(guessedWord: string, populate: boolean) {
+        if (!this.gameState.gameIsActive) {
             return;
         }
         this.clickThruIndex = 0;
-        this.game.ui.removeHighlights(false);
+        this.ui.removeHighlights(false);
         const normGuess = guessedWord.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
-        if (commonWords.includes(normGuess)) {
-            // do nothing
-        } else {
+        if (!commonWords.includes(normGuess)) {
             let alreadyGuessed = false;
             for (let i = 0; i < this.profileData.guessedWords.length; i++) {
                 if (this.profileData.guessedWords[i][0] === normGuess) {
@@ -34,69 +48,75 @@ export class Logic {
             }
             if (!alreadyGuessed || populate) {
                 let numHits = 0;
-                for (let i = 0; i < this.game.baffled.length; i++) {
-                    if (this.game.baffled[i][0] === normGuess) {
-                        this.game.baffled[i][1].reveal();
-                        this.game.baffled[i][1].elements[0].element.setAttribute("data-word", normGuess);
+                for (let i = 0; i < this.gameState.baffled.length; i++) {
+                    if (this.gameState.baffled[i][0] === normGuess) {
+                        this.gameState.baffled[i][1].reveal();
+                        this.gameState.baffled[i][1].elements[0].element.setAttribute("data-word", normGuess);
                         numHits += 1;
                         if (!populate) {
-                            this.game.baffled[i][1].elements[0].element.classList.add("highlighted");
+                            this.gameState.baffled[i][1].elements[0].element.classList.add("highlighted");
                             this.currentlyHighlighted = normGuess;
                         }
                     }
                 }
-                this.profileData.save.saveData.guessedWords = this.game.guessedWords;
+                this.profileData.updateGuesses();
                 if (!populate) {
                     this.guessCounter += 1;
-                    this.profileData.guessedWords.push([normGuess, numHits, this.guessCounter]);
+                    this.profileData.guessedWords.push([normGuess, numHits]);
                     this.profileData.saveProgress();
                 }
-                this.logGuess([normGuess, numHits, this.guessCounter], populate);
+                this.logGuess([normGuess, numHits], populate);
             } else {
                 const guess = document.querySelector("tr[data-guess='" + normGuess + "']");
+                if(!guess){
+                    return;
+                }
                 guess.classList.add("table-secondary");
-                guess[0].scrollIntoView();
+                guess.scrollIntoView();
                 this.currentlyHighlighted = normGuess;
-                document.querySelectorAll('.innerTxt').forEach(function () {
-                    if (this.innerHTML.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase() === normGuess) {
-                        this.classList.add('highlighted');
+                document.querySelectorAll('.innerTxt').forEach((element) => {
+                    if (element.innerHTML.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase() === normGuess) {
+                        element.classList.add('highlighted');
                     }
                 });
             }
-            if (this.game.answer.includes(normGuess)) {
-                this.game.answer = this.game.answer.filter(function (e) {
+            if (this.gameState.answer.includes(normGuess)) {
+                this.gameState.answer = this.gameState.answer.filter(function (e) {
                     return e !== normGuess
                 })
             }
-            if (this.game.answer.length === 0) {
+            if (this.gameState.answer.length === 0) {
                 this.winRound(populate);
             }
         }
     }
 
     selectArticlesStandard() {
-        this.selectedArticles = 'standard';
+        this.profileData.selectedArticles = 'standard';
         this.profileData.saveProgress();
     }
 
     selectArticlesCustom() {
-        this.selectedArticles = 'custom';
+        this.profileData.selectedArticles = 'custom';
         this.profileData.saveProgress();
     }
 
     buildStats() {
-        for (let i = this.game.ui.statLogBody.rows.length - 1; i > 0; i--) {
-            this.game.ui.statLogBody.deleteRow(i);
+        if(!this.ui.statLogBody){
+            return;
+        }
+        for (let i = this.ui.statLogBody.rows.length - 1; i > 0; i--) {
+            this.ui.statLogBody.deleteRow(i);
         }
         for (let i = 0; i < this.profileData.gameWins.length; i++) {
             if (this.profileData.gameWins[i] === 1) {
-                this.game.ui.displayStats(i, this.profileData.gameAnswers[i], this.profileData.gameScores[i], this.profileData.gameAccuracy[i]);
+                this.ui.displayStats(i, this.profileData.gameAnswers, this.profileData.gameScores, this.profileData.gameAccuracy);
             }
         }
     }
 
     getArticleName() {
-        const selectElement = document.getElementById("selectArticle");
+        const selectElement = document.getElementById("selectArticle") as HTMLSelectElement;
         const value = selectElement ? selectElement.value : 'standard';
         if (value === 'custom') {
             return customArticles[Math.floor(Math.random() * customArticles.length)];
@@ -104,7 +124,7 @@ export class Logic {
         return articles[Math.floor(Math.random() * articles.length)];
     }
 
-    enterGuess(allGuesses, pluralizing) {
+    enterGuess(allGuesses: string[], pluralizing: boolean) {
         if (pluralizing) {
             const pluralGuess = pluralize(allGuesses[0]);
             const singularGuess = pluralize(allGuesses[0], 1);
@@ -116,12 +136,16 @@ export class Logic {
         }
     }
 
-    logGuess(guess, populate) {
+    logGuess(guess: [string, number], populate: boolean) {
         if (this.profileData.hidingZero) {
-            this.game.ui.hideZero();
+            this.ui.hideZero();
         }
-        let newRow = this.game.ui.guessLogBody.insertRow(0);
-        newRow.class = 'curGuess';
+        let newRow = this.ui.guessLogBody?.insertRow(0);
+        if(!newRow){
+            return;
+        }
+
+        newRow.className = 'curGuess';
         newRow.setAttribute('data-guess', guess[0]);
         if (!populate) {
             newRow.classList.add('table-secondary');
@@ -135,8 +159,8 @@ export class Logic {
         if (guess[1] > 0) {
             newRow.addEventListener('click', (e) => {
                 e.preventDefault();
-                const inTxt = this.game.ui.getInnerTextFromRow(this, newRow, 1);
-                const allInstances = this.game.ui.wikiHolder.querySelectorAll('[data-word="' + inTxt + '"]');
+                const inTxt = this.ui.getInnerTextFromRow(newRow, 1);
+                const allInstances = this.ui.wikiHolder?.querySelectorAll('[data-word="' + inTxt + '"]');
                 if (this.currentlyHighlighted == null) {
                     this.clickThruIndex = 0;
                     this.currentlyHighlighted = inTxt;
@@ -149,7 +173,7 @@ export class Logic {
                 } else {
                     if (inTxt !== this.currentlyHighlighted) {
                         this.clickThruIndex = 0;
-                        this.game.ui.removeHighlights(false);
+                        this.ui.removeHighlights(false);
                         newRow.classList.add('table-secondary');
                         document.querySelectorAll('.innerTxt').forEach((element) => {
                             if (element.innerHTML.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase() === inTxt) {
@@ -162,20 +186,22 @@ export class Logic {
                 document.querySelectorAll('.superHighlighted').forEach((element) => {
                     element.classList.remove('superHighlighted');
                 });
-                allInstances[this.clickThruIndex % allInstances.length].classList.add('superHighlighted');
-                allInstances[this.clickThruIndex % allInstances.length].scrollIntoView({
-                    behavior: 'auto',
-                    block: 'center',
-                    inline: 'end'
-                });
+                if (allInstances && allInstances.length > 0) {
+                    allInstances[this.clickThruIndex % allInstances.length].classList.add('superHighlighted');
+                    allInstances[this.clickThruIndex % allInstances.length].scrollIntoView({
+                        behavior: 'auto',
+                        block: 'center',
+                        inline: 'end'
+                    });
+                }
                 this.clickThruIndex += 1;
             });
         } else {
             newRow.addEventListener('click', () => {
-                this.game.ui.removeHighlights(true);
+                this.ui.removeHighlights(true);
             });
         }
-        newRow.innerHTML = '<td>' + guess[2] + '</td><td>' + guess[0] + '</td><td class="tableHits">' + guess[1] + '</td>';
+        newRow.innerHTML = '<td>' + "remove this" + '</td><td>' + guess[0] + '</td><td class="tableHits">' + guess[1] + '</td>';
         if (!populate) {
             newRow.scrollIntoView({
                 behavior: 'auto',
@@ -185,9 +211,9 @@ export class Logic {
         }
     }
 
-    winRound(populate) {
-        this.gameIsActive = false;
-        this.game.ui.userGuess.disabled = true;
+    winRound(populate: boolean) {
+        this.gameState.gameIsActive = false;
+        this.ui.disableUserGuess();
         const clap = new Audio('Clap.wav');
         clap.volume = 0.5;
         clap.addEventListener('canplaythrough', clap.play);
@@ -203,12 +229,12 @@ export class Logic {
             },
             origin: {y: 0.6}
         }).then(() => {
-            this.game.ui.revealPage();
+            this.ui.revealPage();
             if (!populate) {
-                this.profileData.gameScores[this.profileData.redactleIndex] = this.profileData.guessedWords.length;
-                this.profileData.gameAccuracy[this.profileData.redactleIndex] = this.currentAccuracy;
-                this.profileData.gameAnswers[this.profileData.redactleIndex] = this.game.ansStr;
-                this.profileData.gameWins[this.profileData.redactleIndex] = 1;
+                this.profileData.gameScores[this.profileData.twitchDactleIndex] = this.profileData.guessedWords.length;
+                this.profileData.gameAccuracy[this.profileData.twitchDactleIndex] = this.currentAccuracy;
+                this.profileData.gameAnswers[this.profileData.twitchDactleIndex] = this.gameState.ansStr;
+                this.profileData.gameWins[this.profileData.twitchDactleIndex] = 1;
             }
         });
         let streakCount = 0;
