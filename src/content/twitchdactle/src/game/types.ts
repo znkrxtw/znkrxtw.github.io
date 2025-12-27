@@ -9,3 +9,33 @@ export interface IGame {
     logic: Logic;
     gameState: GameState;
 }
+
+interface SaveData {
+    twitchDactleIndex: number;
+    articleName: string;
+    guessedWords: [];
+    numbersRevealed: boolean;
+    pageRevealed: boolean;
+    gameWins: number[];
+    gameScores: number[];
+    gameAccuracy: number[];
+    gameAnswers: string[];
+}
+
+interface SavePrefs {
+    hidingZero: boolean;
+    hidingLog: boolean;
+    selectedArticles: string;
+    streamName: string;
+    pluralizing: boolean;
+}
+
+interface SaveId {
+    playerID?: string;
+}
+
+export interface SaveStructure {
+    saveData: SaveData;
+    prefs: SavePrefs;
+    id: SaveId;
+}

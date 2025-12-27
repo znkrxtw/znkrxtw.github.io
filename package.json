@@ -19,6 +19,7 @@
     "@tsparticles/confetti": "^3.9.1",
     "bootstrap": "^5.3.8",
     "comfy.js": "^1.1.29",
-    "pluralize": "^8.0.0"
+    "pluralize": "^8.0.0",
+    "uuidv7": "^1.1.0"
   }
 }

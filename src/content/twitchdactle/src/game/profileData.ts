@@ -1,40 +1,11 @@
 import {GameState} from './gameState';
-
-interface SaveData {
-    twitchDactleIndex: number;
-    articleName: string;
-    guessedWords: [];
-    numbersRevealed: boolean;
-    pageRevealed: boolean;
-    gameWins: number[];
-    gameScores: number[];
-    gameAccuracy: number[];
-    gameAnswers: string[];
-}
-
-interface SavePrefs {
-    hidingZero: boolean;
-    hidingLog: boolean;
-    selectedArticles: string;
-    streamName: string;
-    pluralizing: boolean;
-}
-
-interface SaveId {
-    playerID?: string;
-}
-
-interface SaveStructure {
-    saveData: SaveData;
-    prefs: SavePrefs;
-    id: SaveId;
-}
+import {uuidv7} from 'uuidv7';
+import {SaveStructure} from './types';
 
 export class ProfileData {
 
     private readonly saveString: string;
     private save: SaveStructure;
-    private utility: any;
     private gameState: GameState;
 
     //save data
@@ -57,7 +28,6 @@ export class ProfileData {
     public pluralizing: boolean;
 
     constructor(gameInstance: any) {
-        this.utility = gameInstance.utility;
         this.gameState = gameInstance.gameState;
         this.saveString = "redactleSave";
         this.save = {
@@ -180,7 +150,7 @@ export class ProfileData {
 
     createNewSave() {
         localStorage.clear();
-        this.playerID = this.utility.uuidv4();
+        this.playerID = uuidv7();
         this.articleName = "";
         this.twitchDactleIndex = 0;
         this.save = JSON.parse(JSON.stringify({
