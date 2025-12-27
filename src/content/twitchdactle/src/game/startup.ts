@@ -52,58 +52,10 @@ export class StartUp {
             }
         });
 
-        const hideZero = document.getElementById('hideZero') as HTMLInputElement;
-
-        if (hideZero) {
-            if (this.profileData.hidingZero) {
-                hideZero.checked = this.profileData.hidingZero;
-                this.ui.hideZero();
-            } else {
-                hideZero.checked = false;
-                this.ui.showZero();
-            }
-
-            hideZero.addEventListener('change', (event) => {
-                const target = event.target as HTMLInputElement;
-                target.checked ? this.ui.hideZero() : this.ui.showZero();
-                this.profileData.saveProgress();
-            });
-        }
-
-        const autoPlural = document.getElementById('autoPlural') as HTMLInputElement;
-
-        if (autoPlural) {
-            autoPlural.checked = this.profileData.pluralizing;
-
-            autoPlural?.addEventListener('change', (event) => {
-                const target = event.target as HTMLInputElement;
-                this.profileData.pluralizing = target.checked;
-                this.profileData.saveProgress();
-            });
-        }
-
-        const selectedArticle = document.getElementById('selectArticle') as HTMLSelectElement;
-        if (selectedArticle) {
-            selectedArticle.value = this.profileData.selectedArticles;
-
-            selectedArticle.addEventListener('change', (event) => {
-                const target = event.target as HTMLSelectElement;
-                this.profileData.selectedArticles = target.value === 'custom' ? 'custom' : 'standard';
-                this.profileData.saveProgress();
-            });
-        }
-
-
-        const streamName = document.getElementById('streamName') as HTMLInputElement;
-        if (streamName) {
-            streamName.value = this.profileData.streamName;
-
-            streamName.addEventListener('change', (event) => {
-                const target = event.target as HTMLInputElement;
-                this.profileData.streamName = target.value;
-                this.profileData.saveProgress();
-            });
-        }
+        this.InitHideZero();
+        this.InitAutoPlural();
+        this.InitSelectedArticle();
+        this.InitStreamName();
 
         document.getElementById('infoBtn')?.addEventListener('click', async () => {
             await modalManager.showModal('info');
@@ -116,6 +68,10 @@ export class StartUp {
 
         document.getElementById('settingsBtn')?.addEventListener('click', async () => {
             await modalManager.showModal('settings');
+        });
+
+        document.getElementById('newGameBtn')?.addEventListener('click', async () => {
+            await modalManager.showModal('newGame');
         });
 
         document.getElementById('revealPageButton')?.addEventListener('click', async () => {
@@ -158,6 +114,13 @@ export class StartUp {
             });
         });
 
+        document.querySelectorAll('.closeNewGame').forEach(function (element) {
+            element.addEventListener('click', async () => {
+                (document.activeElement as HTMLElement).blur();
+                await modalManager.hideModal('newGame');
+            });
+        });
+
         document.querySelectorAll('.doReveal').forEach((element) => {
             element.addEventListener('click', async () => {
                 this.logic.winRound(false);
@@ -190,7 +153,7 @@ export class StartUp {
             });
         }
 
-        document.getElementById('newGame')?.addEventListener('click', () => {
+        document.getElementById('startNewGame')?.addEventListener('click', () => {
             this.profileData.newGame();
             this.ui.disableUserGuess();
             this.ui.emptyGuessBody();
@@ -221,7 +184,67 @@ export class StartUp {
         };
 
         // Initialize ComfyJS if available
-        //this.initComfyJS();
+        this.initComfyJS();
+    }
+
+    private InitStreamName() {
+        const streamName = document.getElementById('streamName') as HTMLInputElement;
+        if (streamName) {
+            streamName.value = this.profileData.streamName;
+
+            streamName.addEventListener('change', (event) => {
+                const target = event.target as HTMLInputElement;
+                this.profileData.streamName = target.value;
+                this.profileData.saveProgress();
+            });
+        }
+    }
+
+    private InitSelectedArticle() {
+        const selectedArticle = document.getElementById('selectArticle') as HTMLSelectElement;
+        if (selectedArticle) {
+            selectedArticle.value = this.profileData.selectedArticles;
+
+            selectedArticle.addEventListener('change', (event) => {
+                const target = event.target as HTMLSelectElement;
+                this.profileData.selectedArticles = target.value === 'custom' ? 'custom' : 'standard';
+                this.profileData.saveProgress();
+            });
+        }
+    }
+
+    private InitAutoPlural() {
+        const autoPlural = document.getElementById('autoPlural') as HTMLInputElement;
+
+        if (autoPlural) {
+            autoPlural.checked = this.profileData.pluralizing;
+
+            autoPlural?.addEventListener('change', (event) => {
+                const target = event.target as HTMLInputElement;
+                this.profileData.pluralizing = target.checked;
+                this.profileData.saveProgress();
+            });
+        }
+    }
+
+    private InitHideZero() {
+        const hideZero = document.getElementById('hideZero') as HTMLInputElement;
+
+        if (hideZero) {
+            if (this.profileData.hidingZero) {
+                hideZero.checked = this.profileData.hidingZero;
+                this.ui.hideZero();
+            } else {
+                hideZero.checked = false;
+                this.ui.showZero();
+            }
+
+            hideZero.addEventListener('change', (event) => {
+                const target = event.target as HTMLInputElement;
+                target.checked ? this.ui.hideZero() : this.ui.showZero();
+                this.profileData.saveProgress();
+            });
+        }
     }
 
     async initComfyJS() {

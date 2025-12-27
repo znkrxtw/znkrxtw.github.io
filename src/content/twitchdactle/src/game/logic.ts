@@ -201,7 +201,11 @@ export class Logic {
                 this.ui.removeHighlights(true);
             });
         }
-        newRow.innerHTML = '<td>' + "remove this" + '</td><td>' + guess[0] + '</td><td class="tableHits">' + guess[1] + '</td>';
+        const numberGuess = document.getElementById('numberOfGuesses') as HTMLDivElement;
+        if(numberGuess){
+            numberGuess.innerHTML = this.guessCounter.toString();
+        }
+        newRow.innerHTML = '<td>' + guess[0] + '</td><td class="tableHits">' + guess[1] + '</td>';
         if (!populate) {
             newRow.scrollIntoView({
                 behavior: 'auto',
