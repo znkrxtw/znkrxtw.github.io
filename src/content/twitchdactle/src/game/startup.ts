@@ -107,23 +107,19 @@ export class StartUp {
 
         document.getElementById('infoBtn')?.addEventListener('click', async () => {
             await modalManager.showModal('info');
-            document.body.style.overflow = "hidden";
         });
 
         document.getElementById('statsBtn')?.addEventListener('click', async () => {
             this.logic.buildStats();
             await modalManager.showModal('stats');
-            document.body.style.overflow = "hidden";
         });
 
         document.getElementById('settingsBtn')?.addEventListener('click', async () => {
             await modalManager.showModal('settings');
-            document.body.style.overflow = "hidden";
         });
 
         document.getElementById('revealPageButton')?.addEventListener('click', async () => {
             await modalManager.showModal('revealPage');
-            document.body.style.overflow = "hidden";
         });
 
         document.getElementById('revealNumbersButton')?.addEventListener('click', () => {
@@ -135,7 +131,6 @@ export class StartUp {
             element.addEventListener('click', async () => {
                 (document.activeElement as HTMLElement).blur();
                 await modalManager.hideModal('info');
-                document.body.style.overflow = "auto";
             });
         });
 
@@ -143,7 +138,6 @@ export class StartUp {
             element.addEventListener('click', async () => {
                 (document.activeElement as HTMLElement).blur();
                 await modalManager.hideModal('settings');
-                document.body.style.overflow = "auto";
                 this.profileData.streamName = (document.getElementById('streamName') as HTMLInputElement).value;
                 this.connectStream();
                 this.profileData.saveProgress();
@@ -154,7 +148,6 @@ export class StartUp {
             element.addEventListener('click', async () => {
                 (document.activeElement as HTMLElement).blur();
                 await modalManager.hideModal('stats');
-                document.body.style.overflow = "auto";
             });
         });
 
@@ -162,7 +155,6 @@ export class StartUp {
             element.addEventListener('click', async () => {
                 (document.activeElement as HTMLElement).blur();
                 await modalManager.hideModal('revealPage');
-                document.body.style.overflow = "auto";
             });
         });
 
@@ -171,7 +163,6 @@ export class StartUp {
                 this.logic.winRound(false);
                 (document.activeElement as HTMLElement).blur();
                 await modalManager.hideModal('revealPage');
-                document.body.style.overflow = "auto";
             });
         });
 
@@ -194,23 +185,19 @@ export class StartUp {
             if (event.target === document.getElementById("infoModal")) {
                 (document.activeElement as HTMLElement).blur();
                 await modalManager.hideModal('info');
-                document.querySelector("body")!.style.overflow = "auto";
             }
             if (event.target === document.getElementById("settingsModal")) {
                 (document.activeElement as HTMLElement).blur();
                 await modalManager.hideModal('settings');
-                document.querySelector("body")!.style.overflow = "auto";
                 this.connectStream();
             }
             if (event.target === document.getElementById("statsModal")) {
                 (document.activeElement as HTMLElement).blur();
                 await modalManager.hideModal('stats');
-                document.querySelector("body")!.style.overflow = "auto";
             }
             if (event.target === document.getElementById("revealModal")) {
                 (document.activeElement as HTMLElement).blur();
                 await modalManager.hideModal('revealPage');
-                document.querySelector("body")!.style.overflow = "auto";
             }
         };
 
