@@ -2,6 +2,7 @@ import infoModal from './modals/info.html?raw';
 import settingsModal from './modals/settings.html?raw';
 import statsModal from './modals/stats.html?raw';
 import revealPageModal from './modals/revealPage.html?raw';
+import newGameModal from './modals/newGame.html?raw';
 import 'bootstrap';
 import { Modal } from 'bootstrap';
 
@@ -30,7 +31,8 @@ class ModalManager {
       { name: 'info', html: infoModal },
       { name: 'settings', html: settingsModal },
       { name: 'stats', html: statsModal },
-      { name: 'revealPage', html: revealPageModal }
+      { name: 'revealPage', html: revealPageModal },
+      { name: 'newGame', html: newGameModal },
     ];
 
     modals.forEach(({ name, html }) => {

@@ -52,6 +52,182 @@ export class StartUp {
             }
         });
 
+        this.InitHideZero();
+        this.InitAutoPlural();
+        this.InitSelectedArticle();
+        this.InitStreamName();
+
+        document.getElementById('infoBtn')?.addEventListener('click', async () => {
+            await modalManager.showModal('info');
+        });
+
+        document.getElementById('statsBtn')?.addEventListener('click', async () => {
+            this.logic.buildStats();
+            await modalManager.showModal('stats');
+        });
+
+        document.getElementById('settingsBtn')?.addEventListener('click', async () => {
+            await modalManager.showModal('settings');
+        });
+
+        document.getElementById('newGameBtn')?.addEventListener('click', async () => {
+            await modalManager.showModal('newGame');
+        });
+
+        document.getElementById('revealPageButton')?.addEventListener('click', async () => {
+            await modalManager.showModal('revealPage');
+        });
+
+        document.getElementById('revealNumbersButton')?.addEventListener('click', () => {
+            this.ui.revealNumbers();
+            this.profileData.saveProgress();
+        });
+
+        document.querySelectorAll('.closeInfo').forEach((element) => {
+            element.addEventListener('click', async () => {
+                (document.activeElement as HTMLElement).blur();
+                await modalManager.hideModal('info');
+            });
+        });
+
+        document.querySelectorAll('.closeSettings').forEach((element) => {
+            element.addEventListener('click', async () => {
+                (document.activeElement as HTMLElement).blur();
+                await modalManager.hideModal('settings');
+                this.profileData.streamName = (document.getElementById('streamName') as HTMLInputElement).value;
+                this.connectStream();
+                this.profileData.saveProgress();
+            });
+        });
+
+        document.querySelectorAll('.closeStats').forEach(function (element) {
+            element.addEventListener('click', async () => {
+                (document.activeElement as HTMLElement).blur();
+                await modalManager.hideModal('stats');
+            });
+        });
+
+        document.querySelectorAll('.closeReveal').forEach(function (element) {
+            element.addEventListener('click', async () => {
+                (document.activeElement as HTMLElement).blur();
+                await modalManager.hideModal('revealPage');
+            });
+        });
+
+        document.querySelectorAll('.closeNewGame').forEach(function (element) {
+            element.addEventListener('click', async () => {
+                (document.activeElement as HTMLElement).blur();
+                await modalManager.hideModal('newGame');
+            });
+        });
+
+        document.querySelectorAll('.doReveal').forEach((element) => {
+            element.addEventListener('click', async () => {
+                this.logic.winRound(false);
+                (document.activeElement as HTMLElement).blur();
+                await modalManager.hideModal('revealPage');
+            });
+        });
+
+        document.getElementById('backToTop')?.addEventListener('click', () => {
+            const articleContainer = document.querySelector('.article-container');
+            if (articleContainer) {
+                articleContainer.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+        });
+
+        // Hide/show back to top button based on scroll position
+        const articleContainer = document.querySelector('.article-container');
+        const backToTopButton = document.getElementById('backToTop') as HTMLElement;
+        
+        if (articleContainer && backToTopButton) {
+            articleContainer.addEventListener('scroll', () => {
+                if (articleContainer.scrollTop > 100) {
+                    backToTopButton.style.opacity = '1';
+                } else {
+                    backToTopButton.style.opacity = '0';
+                }
+            });
+        }
+
+        document.getElementById('startNewGame')?.addEventListener('click', () => {
+            this.profileData.newGame();
+            this.ui.disableUserGuess();
+            this.ui.emptyGuessBody();
+        });
+
+        this.ui.navBarButton?.addEventListener('click', () => {
+            this.ui.toggleNavBar();
+        });
+
+        window.onclick = async (event) => {
+            if (event.target === document.getElementById("infoModal")) {
+                (document.activeElement as HTMLElement).blur();
+                await modalManager.hideModal('info');
+            }
+            if (event.target === document.getElementById("settingsModal")) {
+                (document.activeElement as HTMLElement).blur();
+                await modalManager.hideModal('settings');
+                this.connectStream();
+            }
+            if (event.target === document.getElementById("statsModal")) {
+                (document.activeElement as HTMLElement).blur();
+                await modalManager.hideModal('stats');
+            }
+            if (event.target === document.getElementById("revealModal")) {
+                (document.activeElement as HTMLElement).blur();
+                await modalManager.hideModal('revealPage');
+            }
+        };
+
+        // Initialize ComfyJS if available
+        this.initComfyJS();
+    }
+
+    private InitStreamName() {
+        const streamName = document.getElementById('streamName') as HTMLInputElement;
+        if (streamName) {
+            streamName.value = this.profileData.streamName;
+
+            streamName.addEventListener('change', (event) => {
+                const target = event.target as HTMLInputElement;
+                this.profileData.streamName = target.value;
+                this.profileData.saveProgress();
+            });
+        }
+    }
+
+    private InitSelectedArticle() {
+        const selectedArticle = document.getElementById('selectArticle') as HTMLSelectElement;
+        if (selectedArticle) {
+            selectedArticle.value = this.profileData.selectedArticles;
+
+            selectedArticle.addEventListener('change', (event) => {
+                const target = event.target as HTMLSelectElement;
+                this.profileData.selectedArticles = target.value === 'custom' ? 'custom' : 'standard';
+                this.profileData.saveProgress();
+            });
+        }
+    }
+
+    private InitAutoPlural() {
+        const autoPlural = document.getElementById('autoPlural') as HTMLInputElement;
+
+        if (autoPlural) {
+            autoPlural.checked = this.profileData.pluralizing;
+
+            autoPlural?.addEventListener('change', (event) => {
+                const target = event.target as HTMLInputElement;
+                this.profileData.pluralizing = target.checked;
+                this.profileData.saveProgress();
+            });
+        }
+    }
+
+    private InitHideZero() {
         const hideZero = document.getElementById('hideZero') as HTMLInputElement;
 
         if (hideZero) {
@@ -69,153 +245,6 @@ export class StartUp {
                 this.profileData.saveProgress();
             });
         }
-
-        const autoPlural = document.getElementById('autoPlural') as HTMLInputElement;
-
-        if (autoPlural) {
-            autoPlural.checked = this.profileData.pluralizing;
-
-            autoPlural?.addEventListener('change', (event) => {
-                const target = event.target as HTMLInputElement;
-                this.profileData.pluralizing = target.checked;
-                this.profileData.saveProgress();
-            });
-        }
-
-        const selectedArticle = document.getElementById('selectArticle') as HTMLSelectElement;
-        if (selectedArticle) {
-            selectedArticle.value = this.profileData.selectedArticles;
-
-            selectedArticle.addEventListener('change', (event) => {
-                const target = event.target as HTMLSelectElement;
-                this.profileData.selectedArticles = target.value === 'custom' ? 'custom' : 'standard';
-                this.profileData.saveProgress();
-            });
-        }
-
-
-        const streamName = document.getElementById('streamName') as HTMLInputElement;
-        if (streamName) {
-            streamName.value = this.profileData.streamName;
-
-            streamName.addEventListener('change', (event) => {
-                const target = event.target as HTMLInputElement;
-                this.profileData.streamName = target.value;
-                this.profileData.saveProgress();
-            });
-        }
-
-        document.getElementById('infoBtn')?.addEventListener('click', async () => {
-            await modalManager.showModal('info');
-            document.body.style.overflow = "hidden";
-        });
-
-        document.getElementById('statsBtn')?.addEventListener('click', async () => {
-            this.logic.buildStats();
-            await modalManager.showModal('stats');
-            document.body.style.overflow = "hidden";
-        });
-
-        document.getElementById('settingsBtn')?.addEventListener('click', async () => {
-            await modalManager.showModal('settings');
-            document.body.style.overflow = "hidden";
-        });
-
-        document.getElementById('revealPageButton')?.addEventListener('click', async () => {
-            await modalManager.showModal('revealPage');
-            document.body.style.overflow = "hidden";
-        });
-
-        document.getElementById('revealNumbersButton')?.addEventListener('click', () => {
-            this.ui.revealNumbers();
-            this.profileData.saveProgress();
-        });
-
-        document.querySelectorAll('.closeInfo').forEach((element) => {
-            element.addEventListener('click', async () => {
-                (document.activeElement as HTMLElement).blur();
-                await modalManager.hideModal('info');
-                document.body.style.overflow = "auto";
-            });
-        });
-
-        document.querySelectorAll('.closeSettings').forEach((element) => {
-            element.addEventListener('click', async () => {
-                (document.activeElement as HTMLElement).blur();
-                await modalManager.hideModal('settings');
-                document.body.style.overflow = "auto";
-                this.profileData.streamName = (document.getElementById('streamName') as HTMLInputElement).value;
-                this.connectStream();
-                this.profileData.saveProgress();
-            });
-        });
-
-        document.querySelectorAll('.closeStats').forEach(function (element) {
-            element.addEventListener('click', async () => {
-                (document.activeElement as HTMLElement).blur();
-                await modalManager.hideModal('stats');
-                document.body.style.overflow = "auto";
-            });
-        });
-
-        document.querySelectorAll('.closeReveal').forEach(function (element) {
-            element.addEventListener('click', async () => {
-                (document.activeElement as HTMLElement).blur();
-                await modalManager.hideModal('revealPage');
-                document.body.style.overflow = "auto";
-            });
-        });
-
-        document.querySelectorAll('.doReveal').forEach((element) => {
-            element.addEventListener('click', async () => {
-                this.logic.winRound(false);
-                (document.activeElement as HTMLElement).blur();
-                await modalManager.hideModal('revealPage');
-                document.body.style.overflow = "auto";
-            });
-        });
-
-        document.getElementById('backToTop')?.addEventListener('click', function () {
-            document.body.scrollTop = 0;
-            document.documentElement.scrollTop = 0;
-        });
-
-        document.getElementById('newGame')?.addEventListener('click', () => {
-            this.profileData.newGame();
-            this.ui.disableUserGuess();
-            this.ui.emptyGuessBody();
-        });
-
-        this.ui.navBarButton?.addEventListener('click', () => {
-            this.ui.toggleNavBar();
-        });
-
-        window.onclick = async (event) => {
-            if (event.target === document.getElementById("infoModal")) {
-                (document.activeElement as HTMLElement).blur();
-                await modalManager.hideModal('info');
-                document.querySelector("body")!.style.overflow = "auto";
-            }
-            if (event.target === document.getElementById("settingsModal")) {
-                (document.activeElement as HTMLElement).blur();
-                await modalManager.hideModal('settings');
-                document.querySelector("body")!.style.overflow = "auto";
-                this.connectStream();
-            }
-            if (event.target === document.getElementById("statsModal")) {
-                (document.activeElement as HTMLElement).blur();
-                await modalManager.hideModal('stats');
-                document.querySelector("body")!.style.overflow = "auto";
-            }
-            if (event.target === document.getElementById("revealModal")) {
-                (document.activeElement as HTMLElement).blur();
-                await modalManager.hideModal('revealPage');
-                document.querySelector("body")!.style.overflow = "auto";
-            }
-        };
-
-        // Initialize ComfyJS if available
-        //this.initComfyJS();
     }
 
     async initComfyJS() {
