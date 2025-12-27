@@ -4,18 +4,25 @@ import {WikiData} from './wikiData.js';
 import {UI} from './ui.js';
 import {Utility} from './utility.js';
 import {ProfileData} from './profileData.js';
-import {GameState} from './gameState.js';
+import {GameState} from './gameState.ts';
 
-class TwitchDactleGame {
+export class TwitchDactleGame {
+    public ui: UI;
+    public gameState: GameState;
+    public profileData: ProfileData;
+    public logic: Logic;
+    private wikiData: WikiData;
 
     constructor() {
-        this.state = new GameState();
+        this.gameState = new GameState();
         this.ui = new UI(this);
-        this.utility = new Utility();
+        new Utility();
         this.profileData = new ProfileData(this);
         this.logic = new Logic(this);
-        this.startUp = new StartUp(this);
         this.wikiData = new WikiData(this);
+
+        // Initialize startup for event listeners (no need to store reference)
+        new StartUp(this);
 
         // Initialize immediately - modals are loaded synchronously
         this.init();
@@ -33,8 +40,8 @@ class TwitchDactleGame {
         
         stateProps.forEach(prop => {
             Object.defineProperty(this, prop, {
-                get() { return this.state[prop]; },
-                set(value) { this.state[prop] = value; },
+                get() { return this.gameState[prop]; },
+                set(value) { this.gameState[prop] = value; },
                 enumerable: true,
                 configurable: true
             });
@@ -44,7 +51,7 @@ class TwitchDactleGame {
     async init() {
         this._initializeStateProperties();
         
-        this.profileData.loadSave(this);
+        this.profileData.loadSave();
 
         if (!this.profileData.articleName) {
             this.profileData.articleName = this.logic.getArticleName();
