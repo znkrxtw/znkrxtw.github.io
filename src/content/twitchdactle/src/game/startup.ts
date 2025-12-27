@@ -176,6 +176,20 @@ export class StartUp {
             }
         });
 
+        // Hide/show back to top button based on scroll position
+        const articleContainer = document.querySelector('.article-container');
+        const backToTopButton = document.getElementById('backToTop') as HTMLElement;
+        
+        if (articleContainer && backToTopButton) {
+            articleContainer.addEventListener('scroll', () => {
+                if (articleContainer.scrollTop > 100) {
+                    backToTopButton.style.opacity = '1';
+                } else {
+                    backToTopButton.style.opacity = '0';
+                }
+            });
+        }
+
         document.getElementById('newGame')?.addEventListener('click', () => {
             this.profileData.newGame();
             this.ui.disableUserGuess();
