@@ -4,23 +4,24 @@ import {Logic} from "@/content/twitchdactle/src/game/logic.ts";
 
 export class UI {
 
-    private gameState: GameState;
-    private logic: Logic;
-
     public wikiHolder: HTMLElement | null;
     public guessLogBody: HTMLTableElement | null;
     public statLogBody: HTMLTableElement | null;
+    public readonly navBarButton: HTMLElement | null;
+    public spinner: HTMLElement | null;
+
+    private gameState: GameState;
+    private logic: Logic;
+
     private highlightedGuess: NodeListOf<Element>;
     private superHighlightedGuess: NodeListOf<Element>;
     private guessBody: NodeListOf<Element>;
     private readonly userGuess: HTMLInputElement | null;
-    public readonly navBarButton: HTMLElement | null;
-    private statRow: HTMLTableElement | null;
+    private readonly statRow: HTMLTableElement | null;
     private navBarButtonContainer: HTMLElement | null;
     private navBar: HTMLElement | null;
     private navBarBrand: HTMLElement | null;
     private navBarCollapse: HTMLElement | null;
-    public spinner: HTMLElement | null;
 
     constructor(game: IGame) {
         this.gameState = game.gameState;
@@ -44,11 +45,7 @@ export class UI {
         this.navBarCollapse = document.getElementById('navbarNav');
 
         this.statRow = document.getElementById("statsTable") as HTMLTableElement;
-
         this.spinner = document.getElementById('loadingSpinner');
-
-
-
     }
 
     removeHighlights(clearCur: boolean) {

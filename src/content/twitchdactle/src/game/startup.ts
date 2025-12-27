@@ -166,9 +166,14 @@ export class StartUp {
             });
         });
 
-        document.getElementById('backToTop')?.addEventListener('click', function () {
-            document.body.scrollTop = 0;
-            document.documentElement.scrollTop = 0;
+        document.getElementById('backToTop')?.addEventListener('click', () => {
+            const articleContainer = document.querySelector('.article-container');
+            if (articleContainer) {
+                articleContainer.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
         });
 
         document.getElementById('newGame')?.addEventListener('click', () => {

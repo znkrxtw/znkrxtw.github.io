@@ -20,6 +20,7 @@ body {
 
 .article-container {
     overflow-y: auto;
+    position: relative;
 }
 
 .guess-area {
@@ -392,4 +393,28 @@ td {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* Back to Top Button Styles */
+#backToTop {
+    position: sticky;
+    bottom: 80px;
+    right: 50px;
+    z-index: 1000;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    float: right;
+}
+
+#backToTop:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
