@@ -107,4 +107,21 @@ export class UI {
             }
         }
     }
+
+    disableUserGuess() {
+        this.userGuess.disabled = true;
+    }
+
+    enableUserGuess() {
+        this.userGuess.disabled = false;
+    }
+
+    toggleNavBar() {
+        this.navBarBrand.classList.toggle('hidden');
+        this.navBarCollapse.classList.toggle('hidden');
+        this.navBarButtonContainer.classList.toggle('shrink');
+        const isNavBarHidden = this.navBar.classList.toggle('hidden');
+        this.navBarButton.innerText = isNavBarHidden ? "↓" : "↑";
+    }
+
 }

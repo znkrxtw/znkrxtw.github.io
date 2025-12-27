@@ -4,7 +4,7 @@ import './styles.css';
 import 'bootstrap';
 
 // Load modals synchronously before game initialization
-import { loadModals } from './modals.js';
+import { loadModals } from './modals.ts';
 loadModals();
 
 // Create and start the game
